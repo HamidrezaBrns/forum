@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Question;
+use App\Models\Answer;
+use App\Models\Tag;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Vote;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +16,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call(TagSeeder::class);
+        $tags = Tag::all();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $users = User::factory(10)->create();
+
+        $questions = Question::factory(100)->recycle($users)->hasAttached($tags->random(3))->create();
+
+        $answers = Answer::factory(200)->recycle($users)->recycle($questions)->create();
+
+        $hamidreza = User::factory()
+            ->has(Question::factory(5))
+            ->has(Answer::factory(20)->recycle($questions))
+            ->has(Vote::factory()->forEachSequence(
+                ...$questions->random(100)->map(fn(Question $question) => ['votable_id' => $question]),
+                ...$answers->random(200)->map(fn(Answer $answer) => ['votable_id' => $answer]),
+            ))
+            ->create([
+                'name' => 'Hamidreza',
+                'email' => 'test@example.com',
+            ]);
     }
 }
