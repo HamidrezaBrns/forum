@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { HTMLAttributes, onMounted, ref } from 'vue';
+import { HTMLAttributes } from 'vue';
 import { useVModel } from '@vueuse/core';
 import { cn } from '@/lib/utils';
 
