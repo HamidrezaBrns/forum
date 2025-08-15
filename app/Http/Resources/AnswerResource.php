@@ -22,7 +22,7 @@ class AnswerResource extends JsonResource
             'question' => QuestionResource::make($this->whenLoaded('question')),
             'body' => $this->body,
             'votes_count' => $this->votes_count,
-            'vote' => $this->when($request->user(), fn() => $this->votes()->whereBelongsTo($request->user())->first()), //
+            'vote' => $this->when($request->user(), fn() => VoteResource::make($this->votes()->whereBelongsTo($request->user())->first())), //
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'can' => [
