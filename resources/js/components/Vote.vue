@@ -12,6 +12,7 @@ const toggleVote = (isUpvote: boolean) => {
             preserveScroll: true,
             onStart: () => (processing.value = true),
             onFinish: () => (processing.value = false),
+            only: [props.post.type === 'question' ? 'question' : 'answers'],
             // onError: (errors: any) => {
             //     if (errors.response && errors.response.status === 429) {
             //         toast.error('Too many requests');
@@ -26,6 +27,7 @@ const toggleVote = (isUpvote: boolean) => {
                 preserveScroll: true,
                 onStart: () => (processing.value = true),
                 onFinish: () => (processing.value = false),
+                only: [props.post.type === 'question' ? 'question' : 'answers'],
             },
         );
     }
