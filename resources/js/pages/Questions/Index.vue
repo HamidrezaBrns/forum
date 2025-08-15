@@ -44,7 +44,6 @@ const breadcrumbs: BreadcrumbItem[] = [
                         <div class="mr-4 min-w-14 space-y-2 text-right text-xs text-gray-500">
                             <div>{{ question.votes_count }} votes</div>
                             <div>{{ question.answers_count }} answers</div>
-                            <div>0 views</div>
                         </div>
                         <div class="w-full">
                             <h3 class="mb-1 break-all text-blue-500">
