@@ -23,7 +23,7 @@ class TagSeeder extends Seeder
                 'description' => 'python',
             ],
             [
-                'name' => 'cpp',
+                'name' => 'c++',
                 'description' => 'C++',
             ],
             [
