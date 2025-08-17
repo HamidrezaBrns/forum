@@ -39,10 +39,10 @@ const toggleVote = (isUpvote: boolean) => {
         <button
             @click="toggleVote(true)"
             :disabled="processing || !post.can?.vote"
-            class="rounded-full border px-2 py-1 hover:opacity-70"
+            class="cursor-pointer rounded-full border px-2 py-1 hover:opacity-70 disabled:cursor-default"
             :class="{ 'bg-green-200': post.vote?.is_upvote == true, 'bg-gray-100 text-gray-400': !post.can?.vote }"
         >
-            ▲
+            <i class="ri-arrow-up-s-line"></i>
         </button>
 
         <div class="p-2">{{ post.votes_count }}</div>
@@ -50,10 +50,10 @@ const toggleVote = (isUpvote: boolean) => {
         <button
             @click="toggleVote(false)"
             :disabled="processing || !post.can?.vote"
-            class="rounded-full border px-2 py-1 hover:opacity-70"
+            class="cursor-pointer rounded-full border px-2 py-1 hover:opacity-70 disabled:cursor-default"
             :class="{ 'bg-orange-200': post.vote?.is_upvote == false, 'bg-gray-100 text-gray-400': !post.can?.vote }"
         >
-            ▼
+            <i class="ri-arrow-down-s-line"></i>
         </button>
     </div>
 </template>

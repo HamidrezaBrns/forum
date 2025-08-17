@@ -73,7 +73,7 @@ class QuestionController extends Controller
 
         return inertia('Questions/Show', [
             'question' => fn() => QuestionResource::make($question),
-            'answers' => fn() => AnswerResource::collection($question->answers()->with('user')->latest()->latest('id')->paginate()),
+            'answers' => fn() => AnswerResource::collection($question->answers()->with('user')->latest()->latest('id')->paginate(10)),
         ]);
     }
 

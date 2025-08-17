@@ -3,8 +3,8 @@ import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import PostField from '@/components/PostField.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
+import TiptapEditor from '@/components/TiptapEditor.vue';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { useConfirm } from '@/composables/useConfirm';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
@@ -125,17 +125,17 @@ const deleteQuestion = async (questionId: number) => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="mb-40 max-w-2/3 p-4">
             <!-- question -->
-            <div>
-                <h1 class="mb-2 text-2xl font-bold">{{ question.title }}</h1>
-                <PostField :post="question" @edit="editQuestion" @delete="deleteQuestion" />
+            <div class="border-b-4 border-dashed">
+                <h1 class="mb-4 text-2xl font-bold">{{ question.title }}</h1>
+                <PostField class="mb-4" :post="question" @edit="editQuestion" @delete="deleteQuestion" />
             </div>
 
             <!-- answers -->
             <div>
-                <div class="mt-10">
+                <div class="mt-6">
                     <Heading
                         :title="`${answers.meta.total} ${answers.meta.total > 1 ? 'Answers' : 'Answer'}`"
-                        description="Answers are ordered by votes."
+                        description="Your replies are sorted by latest post."
                     />
 
                     <div class="divide-y">
@@ -148,10 +148,15 @@ const deleteQuestion = async (questionId: number) => {
                 </div>
 
                 <form v-if="$page.props.auth.user" @submit.prevent="() => (answerIdBeingEdited ? updateAnswer() : addAnswer())">
-                    <h2 class="mb-5 text-xl">Your Answer</h2>
+                    <h2 class="mb-5 text-lg font-medium"><i class="ri-question-answer-fill"></i> Your Answer</h2>
 
                     <div class="mb-4">
-                        <Textarea ref="answerTextarea" v-model="answerForm.body" placeholder="Here's what I think..." />
+                        <TiptapEditor
+                            ref="answerTextarea"
+                            v-model="answerForm.body"
+                            placeholder="Here's what I think..."
+                            editorClass="!min-h-[160px]"
+                        />
                         <InputError :message="answerForm.errors.body" />
                     </div>
 
@@ -171,7 +176,7 @@ const deleteQuestion = async (questionId: number) => {
                     </Button>
                 </form>
                 <div v-else>
-                    <Link :href="route('login')" class="text-blue-500">Log in</Link>
+                    <Link :href="route('login')" class="text-blue-500 hover:underline">Log in</Link>
                     , for posting your answer...
                 </div>
             </div>

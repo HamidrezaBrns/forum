@@ -18,7 +18,7 @@ defineProps({
 </script>
 
 <template>
-    <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+    <div v-if="meta.links.length > 3" class="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6">
         <div class="flex flex-1 justify-between sm:hidden">
             <component
                 :is="meta.links[0].url ? Link : 'span'"
@@ -63,9 +63,9 @@ defineProps({
                         :key="link.label"
                         :href="link.url"
                         :only="only"
-                        class="relative inline-flex items-center px-4 py-2 text-gray-400"
+                        class="relative inline-flex items-center px-4 py-2 bg-white text-gray-400"
                         :class="{
-                            'z-10 bg-slate-600 text-white focus-visible:outline-2': link.active,
+                            'z-10 !bg-slate-600 text-white focus-visible:outline-2': link.active,
                             'text-gray-900 inset-ring inset-ring-gray-300 hover:bg-gray-50 focus:outline-offset-0': !link.active,
                         }"
                     >
