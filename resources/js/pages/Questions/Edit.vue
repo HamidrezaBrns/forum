@@ -4,13 +4,13 @@ import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { useConfirm } from '@/composables/useConfirm';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { formattedDate } from '@/utilities/date';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
+import TiptapEditor from '@/components/TiptapEditor.vue';
 
 const props = defineProps(['question']);
 
@@ -37,7 +37,6 @@ const updateQuestion = async () => {
     }
 
     questionForm.put(route('questions.update', props.question.id), {
-        onError: () => console.log(questionForm.errors),
         onSuccess: () => {
             toast('Your question successfully edited.', {
                 description: formattedDate,
@@ -72,7 +71,7 @@ const updateQuestion = async () => {
 
                     <div class="mb-4">
                         <Label for="body">Body</Label>
-                        <Textarea id="body" v-model="questionForm.body" placeholder="" />
+                        <TiptapEditor v-model="questionForm.body" />
                         <InputError :message="questionForm.errors.body" class="mt-1" />
                     </div>
 

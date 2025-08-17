@@ -2,21 +2,35 @@
 import Tags from '@/components/Tags.vue';
 import UserInfoCard from '@/components/UserInfoCard.vue';
 import Vote from '@/components/Vote.vue';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/atom-one-dark.min.css';
+import { onMounted, watch } from 'vue';
 
 // question/answer
-defineProps(['post']);
+const props = defineProps(['post']);
 
 defineEmits(['edit', 'delete']);
+
+onMounted(() => highlightAll());
+
+watch(
+    () => props.post.body,
+    () => highlightAll(),
+);
+
+const highlightAll = () => {
+    document.querySelectorAll('pre code').forEach((el) => {
+        hljs.highlightElement(el as HTMLElement);
+    });
+};
 </script>
 
 <template>
     <div class="flex">
-        <Vote :post="post" class="pr-4" />
+        <Vote :post="post" class="pr-6 pl-2" />
 
         <div class="w-full">
-            <article class="mb-4 break-all">
-                {{ post.body }}
-            </article>
+            <article class="!prose !prose-sm mb-4 !max-w-none break-after-all dark:!prose-invert" v-html="post.body" />
 
             <Tags :question="post" />
 
@@ -36,3 +50,19 @@ defineEmits(['edit', 'delete']);
         </div>
     </div>
 </template>
+
+<style lang="scss" scoped>
+:deep(code:not(pre code)) {
+    ::before,
+    ::after {
+        content: none !important;
+    }
+
+    background-color: #f5f5f5;
+    color: #d6336c;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+</style>

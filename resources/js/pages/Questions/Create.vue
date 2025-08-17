@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
+import TiptapEditor from '@/components/TiptapEditor.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
@@ -39,7 +39,7 @@ const createQuestion = () => questionForm.post(route('questions.store'));
 
                 <div class="mb-4">
                     <Label for="body" class="mb-1">Body</Label>
-                    <Textarea id="body" v-model="questionForm.body" placeholder="" />
+                    <TiptapEditor v-model="questionForm.body" />
                     <InputError :message="questionForm.errors.body" class="mt-1" />
                 </div>
 
