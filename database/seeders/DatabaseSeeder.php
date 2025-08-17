@@ -21,12 +21,16 @@ class DatabaseSeeder extends Seeder
 
         $users = User::factory(10)->create();
 
-        $questions = Question::factory(100)->recycle($users)->hasAttached($tags->random(3))->create();
+        $questions = Question::factory(100)
+            ->withFixture()
+            ->recycle($users)
+            ->hasAttached($tags->random(3))
+            ->create();
 
         $answers = Answer::factory(200)->recycle($users)->recycle($questions)->create();
 
         $hamidreza = User::factory()
-            ->has(Question::factory(5))
+            ->has(Question::factory(5)->withFixture())
             ->has(Answer::factory(20)->recycle($questions))
             ->has(Vote::factory()->forEachSequence(
                 ...$questions->random(100)->map(fn(Question $question) => ['votable_id' => $question]),
