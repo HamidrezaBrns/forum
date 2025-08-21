@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ConfirmationModal from '@/components/ConfirmationModal.vue';
 import { Toaster } from '@/components/ui/sonner';
-import AppLayout from '@/layouts/app/AppSidebarLayout.vue';
+import AppLayout from '@/layouts/app/AppHeaderLayout.vue';
 import type { BreadcrumbItemType } from '@/types';
 import 'vue-sonner/style.css';
 
