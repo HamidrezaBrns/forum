@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->morphs('commentable');
+            $table->text('body');
             $table->timestamps();
         });
     }

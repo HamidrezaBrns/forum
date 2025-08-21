@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comment;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Tag;
@@ -24,10 +25,22 @@ class DatabaseSeeder extends Seeder
         $questions = Question::factory(100)
             ->withFixture()
             ->recycle($users)
-            ->hasAttached($tags->random(3))
-            ->create();
+            ->create()
+            ->each(function (Question $question) use ($users, $tags) {
+                $question->tags()->attach($tags->random(rand(1, 5)));
 
-        $answers = Answer::factory(200)->recycle($users)->recycle($questions)->create();
+                Comment::factory(rand(0, 10))->recycle($users)->create([
+                    'commentable_id' => $question,
+                ]);
+            });
+
+        $answers = Answer::factory(200)
+            ->recycle($users)
+            ->recycle($questions)
+            ->create()
+            ->each(fn(Answer $answer) => Comment::factory(rand(0, 5))->recycle($users)->create([
+                'commentable_id' => $answer,
+            ]));
 
         $hamidreza = User::factory()
             ->has(Question::factory(5)->withFixture())

@@ -2,9 +2,12 @@
 
 namespace App\Policies;
 
+use App\Models\Answer;
 use App\Models\Comment;
+use App\Models\Question;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Database\Eloquent\Model;
 
 class CommentPolicy
 {
@@ -27,9 +30,9 @@ class CommentPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Model $commentable): bool
     {
-        return false;
+        return in_array($commentable::class, [Question::class, Answer::class]);
     }
 
     /**
@@ -45,7 +48,11 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment): bool
     {
-        return false;
+        if ($user->id !== $comment->user_id) {
+            return false;
+        }
+
+        return $comment->created_at->isAfter(now()->subHour());
     }
 
     /**
