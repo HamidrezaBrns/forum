@@ -17,7 +17,7 @@ class Question extends Model
     /** @use HasFactory<QuestionFactory> */
     use HasFactory;
 
-    protected $withCount = ['answers'];
+    protected $withCount = ['answers', 'comments'];
 
     public function user(): BelongsTo
     {

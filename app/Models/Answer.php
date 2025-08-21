@@ -13,6 +13,8 @@ class Answer extends Model
     /** @use HasFactory<AnswerFactory> */
     use HasFactory;
 
+    protected $withCount = ['comments'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
