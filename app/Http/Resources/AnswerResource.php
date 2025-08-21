@@ -21,7 +21,8 @@ class AnswerResource extends JsonResource
             'user' => UserResource::make($this->whenLoaded('user')),
             'question' => QuestionResource::make($this->whenLoaded('question')),
             'body' => $this->body,
-            'votes_count' => $this->votes_count,
+            'comments_count' => $this->comments_count, // by query
+            'votes_count' => $this->votes_count, // table field
             'vote' => $this->when($request->user(), fn() => VoteResource::make($this->votes()->whereBelongsTo($request->user())->first())), //
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
