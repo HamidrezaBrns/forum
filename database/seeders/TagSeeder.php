@@ -19,12 +19,28 @@ class TagSeeder extends Seeder
                 'description' => 'PHP Hypertext Preprocessor',
             ],
             [
+                'name' => 'laravel',
+                'description' => 'eloquent php framework',
+            ],
+            [
                 'name' => 'python',
                 'description' => 'python',
             ],
             [
+                'name' => 'ruby',
+                'description' => 'a programming language',
+            ],
+            [
+                'name' => 'java',
+                'description' => 'a programming language',
+            ],
+            [
+                'name' => 'c',
+                'description' => 'the best language',
+            ],
+            [
                 'name' => 'c++',
-                'description' => 'C++',
+                'description' => 'The best programming language',
             ],
             [
                 'name' => 'javascript',
