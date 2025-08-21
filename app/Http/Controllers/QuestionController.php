@@ -69,11 +69,9 @@ class QuestionController extends Controller
     {
         Gate::authorize('view', $question);
 
-        $question->load(['user', 'tags']);
-
         return inertia('Questions/Show', [
-            'question' => fn() => QuestionResource::make($question),
-            'answers' => fn() => AnswerResource::collection($question->answers()->with('user')->latest()->latest('id')->paginate(10)),
+            'question' => fn() => QuestionResource::make($question->load(['user', 'tags']))->withAttribute('permissions')->withAttribute('user-vote'),
+            'answers' => fn() => AnswerResource::collection($question->answers()->with(['user'])->latest()->latest('id')->paginate(10)),
         ]);
     }
 
