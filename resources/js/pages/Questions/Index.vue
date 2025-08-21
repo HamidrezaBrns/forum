@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import ShowUserAvatar from '@/components/ShowUserAvatar.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
 import Tags from '@/components/Tags.vue';
 import { Button } from '@/components/ui/button';
-import UserInfoCard from '@/components/UserInfoCard.vue';
+import Container from '@/components/ui/Container.vue';
+import UserInfoSimpleCard from '@/components/UserInfoSimpleCard.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
+import { Eye, MessageSquareQuote, Vote } from 'lucide-vue-next';
 
 defineProps(['questions', 'tag']);
 
@@ -21,11 +24,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     <Head title="Questions" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="max-w-2/3 px-4 py-6">
+        <Container>
             <div v-if="tag" class="border-b px-6 pb-4">
-                <h1 class="text-3xl font-bold">[{{ tag.name }}]</h1>
+                <h1 class="mb-2 text-3xl font-bold">
+                    [{{ tag.name }}] <span class="text-sm font-medium">{{ questions.meta.total }} Questions</span>
+                </h1>
 
-                <p class="mt-2 text-sm">{{ tag.description }}</p>
+                <p class="text-sm">{{ tag.description }}</p>
             </div>
 
             <div v-else class="flex justify-between border-b px-6 pb-4">
@@ -41,23 +46,42 @@ const breadcrumbs: BreadcrumbItem[] = [
             <ul class="divide-y">
                 <li v-for="question in questions.data" :key="question.id" class="px-6 py-4">
                     <div class="flex">
-                        <div class="mr-4 min-w-14 space-y-2 text-right text-xs text-gray-500">
-                            <div>{{ question.votes_count }} votes</div>
-                            <div>{{ question.answers_count }} answers</div>
-                        </div>
+                        <!--                        <div class="mr-4 min-w-14 space-y-2 text-right text-xs text-gray-500">-->
+                        <!--                            <div>{{ question.votes_count }} votes</div>-->
+                        <!--                            <div>{{ question.answers_count }} answers</div>-->
+                        <!--                        </div>-->
+                        <ShowUserAvatar :entity="question" class="mr-2" />
+
                         <div class="w-full">
-                            <h3 class="mb-1 break-all text-blue-500">
-                                <Link :href="route('questions.show', question.id)">
-                                    {{ question.title }}
-                                </Link>
-                            </h3>
+                            <div class="flex justify-between">
+                                <h3 class="mb-1 w-2xl pr-4 text-blue-500">
+                                    <Link :href="route('questions.show', question.id)">
+                                        {{ question.title }}
+                                    </Link>
+                                </h3>
 
-                            <p class="mb-3 text-sm break-all">{{ question.body.substring(0, 170) }}...</p>
+                                <div class="flex space-x-6 text-sm text-gray-500">
+                                    <div class="flex gap-0.5" title="Votes">
+                                        <span>{{ question.votes_count }}</span>
+                                        <Vote class="size-5" />
+                                    </div>
+                                    <div class="flex gap-0.5" title="Views">
+                                        <span>{{ question.votes_count }}</span>
+                                        <Eye class="size-5" />
+                                    </div>
+                                    <div class="flex gap-0.5" title="Answers">
+                                        <span>{{ question.answers_count }}</span>
+                                        <MessageSquareQuote class="size-5" />
+                                    </div>
+                                </div>
+                            </div>
 
-                            <div class="flex justify-between gap-2">
+                            <p class="mb-3 text-sm break-words">{{ question.body.substring(0, 170) }}...</p>
+
+                            <div class="flex items-center justify-between gap-2">
                                 <Tags :question="question" />
 
-                                <UserInfoCard :post="question" simple-badge />
+                                <UserInfoSimpleCard :post="question" simple-badge />
                             </div>
                         </div>
                     </div>
@@ -65,6 +89,6 @@ const breadcrumbs: BreadcrumbItem[] = [
             </ul>
 
             <SimplePagination :meta="questions.meta" details :only="['questions']" />
-        </div>
+        </Container>
     </AppLayout>
 </template>

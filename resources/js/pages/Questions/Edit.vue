@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
+import TiptapEditor from '@/components/TiptapEditor.vue';
 import { Button } from '@/components/ui/button';
+import Container from '@/components/ui/Container.vue';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useConfirm } from '@/composables/useConfirm';
@@ -10,7 +12,6 @@ import { formattedDate } from '@/utilities/date';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
-import TiptapEditor from '@/components/TiptapEditor.vue';
 
 const props = defineProps(['question']);
 
@@ -49,7 +50,7 @@ const updateQuestion = async () => {
     <Head title="Edit Question" />
 
     <AppLayout>
-        <div class="mb-40 max-w-2/3 p-4">
+        <Container>
             <Heading title="Edit question" />
 
             <form @submit.prevent="updateQuestion">
@@ -84,6 +85,6 @@ const updateQuestion = async () => {
                     </Button>
                 </div>
             </form>
-        </div>
+        </Container>
     </AppLayout>
 </template>

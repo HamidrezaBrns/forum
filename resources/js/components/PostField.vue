@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import CommentSection from '@/components/CommentSection.vue';
 import Tags from '@/components/Tags.vue';
-import UserInfoCard from '@/components/UserInfoCard.vue';
-import Vote from '@/components/Vote.vue';
+import UserInfoPostCard from '@/components/UserInfoPostCard.vue';
+import Voting from '@/components/Voting.vue';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.min.css';
 import { onMounted, watch } from 'vue';
@@ -19,7 +20,7 @@ watch(
 );
 
 const highlightAll = () => {
-    document.querySelectorAll('pre code').forEach((el) => {
+    document.querySelectorAll('pre code:not([data-highlighted])').forEach((el) => {
         hljs.highlightElement(el as HTMLElement);
     });
 };
@@ -27,10 +28,10 @@ const highlightAll = () => {
 
 <template>
     <div class="flex">
-        <Vote :post="post" class="pr-6 pl-2" />
+        <Voting :post="post" class="pr-6 pl-2 border-l-2" />
 
         <div class="w-full">
-            <article class="!prose !prose-sm mb-4 !max-w-none break-after-all dark:!prose-invert" v-html="post.body" />
+            <article class="!prose mb-4 !max-w-none break-after-all dark:!prose-invert prose-pre:max-h-[800px]" v-html="post.body" />
 
             <Tags :question="post" />
 
@@ -45,8 +46,10 @@ const highlightAll = () => {
                     </form>
                 </div>
 
-                <UserInfoCard :post="post" />
+                <UserInfoPostCard :post="post" />
             </div>
+
+            <CommentSection :commentable-type="post.type" :commentable-id="post.id" :comments-count="post.comments_count" />
         </div>
     </div>
 </template>

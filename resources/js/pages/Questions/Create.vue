@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
+import Container from '@/components/ui/Container.vue';
 
 const questionForm = useForm({
     title: '',
@@ -21,7 +22,7 @@ const createQuestion = () => questionForm.post(route('questions.store'));
     <Head title="Ask Question" />
 
     <AppLayout>
-        <div class="max-w-2/3 p-4">
+        <Container>
             <Heading title="Ask a question" />
 
             <form @submit.prevent="createQuestion">
@@ -48,6 +49,6 @@ const createQuestion = () => questionForm.post(route('questions.store'));
                     Post your question
                 </Button>
             </form>
-        </div>
+        </Container>
     </AppLayout>
 </template>
