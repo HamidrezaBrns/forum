@@ -5,11 +5,6 @@ import { relativeDate } from '@/utilities/date';
 import { computed } from 'vue';
 
 const props = defineProps({
-    simpleBadge: {
-        type: Boolean,
-        default: false,
-    },
-
     post: {
         type: Object,
         required: true,
@@ -21,13 +16,7 @@ const showAvatar = computed(() => props.post.user.avatar && props.post.user.avat
 </script>
 
 <template>
-    <div v-if="simpleBadge" class="space-x-1 text-xs text-gray-500">
-        <span class="font-semibold">{{ post.user.name }}<span>│</span></span>
-        <span>asked {{ relativeDate(post.created_at) }}</span>
-        <span v-if="post.created_at !== post.updated_at"><span>●</span> edited {{ relativeDate(post.updated_at) }}</span>
-    </div>
-
-    <div v-else class="w-[210px] rounded bg-blue-100 px-1.5 py-2">
+    <div class="w-[210px] rounded bg-blue-100 px-1.5 py-2">
         <ul class="mb-1 list-inside list-disc text-xs text-gray-600">
             <!-- created -->
             <li>{{ post.title ? 'asked' : 'answered' }} {{ relativeDate(post.created_at) }}</li>
