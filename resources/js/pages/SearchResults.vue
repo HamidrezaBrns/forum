@@ -19,7 +19,7 @@ defineProps(['questions', 'tag']);
                 <div class="flex justify-between mb-6">
                     <h1 class="text-3xl font-medium">Search Results</h1>
 
-                    <div v-if="$page.props.permissions.create_questions">
+                    <div>
                         <Link :href="route('questions.create')">
                             <Button type="button">Ask Question</Button>
                         </Link>
@@ -35,18 +35,17 @@ defineProps(['questions', 'tag']);
                         <div class="mr-4 min-w-14 space-y-2 text-right text-xs text-gray-500">
                             <div>{{ question.votes_count }} votes</div>
                             <div>{{ question.answers_count }} answers</div>
+                            <div>{{ question.views_count }} views</div>
                         </div>
                         <div class="w-full">
-                            <h3 class="mb-1 break-all text-blue-500">
+                            <h3 class="mb-2 break-all text-blue-500">
                                 <Link :href="route('questions.show', question.id)">
                                     {{ question.title }}
                                 </Link>
                             </h3>
 
-                            <p class="mb-3 text-sm break-all">{{ question.body.substring(0, 170) }}...</p>
-
                             <div class="flex justify-between gap-2">
-                                <Tags :question="question" />
+                                <Tags :tags="question.tags" />
 
                                 <UserInfoSimpleCard :post="question" simple-badge />
                             </div>
