@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+import TextAlign from '@tiptap/extension-text-align';
 import { Placeholder } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { EditorContent, useEditor } from '@tiptap/vue-3';
 import 'highlight.js/styles/atom-one-dark.min.css';
-import { common, createLowlight } from 'lowlight';
+import { all, createLowlight } from 'lowlight';
 import 'remixicon/fonts/remixicon.css';
 import { onBeforeUnmount, onMounted, watch } from 'vue';
 
 const props = defineProps(['editorClass', 'placeholder']);
 const model = defineModel();
 
-const lowlight = createLowlight(common);
+const lowlight = createLowlight(all);
 
 const editor = useEditor({
     extensions: [
@@ -20,6 +21,11 @@ const editor = useEditor({
                 levels: [2, 3, 4],
             },
             codeBlock: false,
+        }),
+        TextAlign.configure({
+            types: ['orderedList', 'bulletList', 'blockquote', 'heading', 'paragraph'],
+            alignments: ['left', 'right'],
+            defaultAlignment: 'left',
         }),
 
         CodeBlockLowlight.configure({
@@ -45,7 +51,7 @@ const editor = useEditor({
 onMounted(() => {
     watch(
         model,
-        (value) => {
+        (value: any) => {
             if (editor.value?.getHTML() === value) {
                 return;
             }
@@ -204,6 +210,28 @@ const promptUserForHref = () => {
             </li>
             <li>
                 <button
+                    @click="editor.chain().focus().setTextAlign('left').run()"
+                    type="button"
+                    class="px-3 py-2"
+                    :class="[editor.isActive({ textAlign: 'left' }) ? 'bg-slate-700 text-white' : 'hover:bg-gray-200']"
+                    title="Align left"
+                >
+                    <i class="ri-align-left"></i>
+                </button>
+            </li>
+            <li>
+                <button
+                    @click="editor.chain().focus().setTextAlign('right').run()"
+                    type="button"
+                    class="px-3 py-2"
+                    :class="[editor.isActive({ textAlign: 'right' }) ? 'bg-slate-700 text-white' : 'hover:bg-gray-200']"
+                    title="Align right"
+                >
+                    <i class="ri-align-right"></i>
+                </button>
+            </li>
+            <li>
+                <button
                     @click="editor.chain().focus().toggleCode().run()"
                     type="button"
                     class="px-3 py-2"
@@ -257,5 +285,9 @@ const promptUserForHref = () => {
     float: left;
     height: 0;
     pointer-events: none;
+}
+
+:deep(.tiptap [style*='text-align: right']) {
+    direction: rtl;
 }
 </style>

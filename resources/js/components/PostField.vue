@@ -71,4 +71,8 @@ const highlightAll = () => {
     font-family: monospace;
     font-size: 0.9em;
 }
+
+:deep([style*='text-align: right']) {
+    direction: rtl;
+}
 </style>
