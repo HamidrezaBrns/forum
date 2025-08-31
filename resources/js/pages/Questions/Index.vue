@@ -66,7 +66,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                                         <Vote class="size-5" />
                                     </div>
                                     <div class="flex gap-0.5" title="Views">
-                                        <span>{{ question.votes_count }}</span>
+                                        <span>{{ question.views_count }}</span>
                                         <Eye class="size-5" />
                                     </div>
                                     <div class="flex gap-0.5" title="Answers">

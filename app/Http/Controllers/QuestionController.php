@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\QuestionResource;
 use App\Http\Resources\AnswerResource;
+use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -68,6 +69,8 @@ class QuestionController extends Controller
     public function show(Question $question)
     {
         Gate::authorize('view', $question);
+
+        views($question)->cooldown(now()->addDay())->record();
 
         return inertia('Questions/Show', [
             'question' => fn() => QuestionResource::make($question->load(['user', 'tags']))->withAttribute('permissions')->withAttribute('user-vote'),
