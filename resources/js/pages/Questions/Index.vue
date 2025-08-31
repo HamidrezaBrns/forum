@@ -6,24 +6,23 @@ import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container.vue';
 import UserInfoSimpleCard from '@/components/UserInfoSimpleCard.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { Eye, MessageSquareQuote, Vote } from 'lucide-vue-next';
 
-defineProps(['questions', 'tag']);
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Questions',
-        href: '/questions',
+defineProps({
+    questions: {
+        type: Object,
+        required: true,
     },
-];
+
+    tag: Object,
+});
 </script>
 
 <template>
     <Head title="Questions" />
 
-    <AppLayout :breadcrumbs="breadcrumbs">
+    <AppLayout>
         <Container>
             <div v-if="tag" class="border-b px-6 pb-4">
                 <h1 class="mb-2 text-3xl font-bold">
@@ -36,7 +35,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             <div v-else class="flex justify-between border-b px-6 pb-4">
                 <h1 class="text-3xl font-medium">{{ questions.meta.total }} Questions</h1>
 
-                <div v-if="$page.props.permissions.create_questions">
+                <div>
                     <Link :href="route('questions.create')">
                         <Button type="button">Ask Question</Button>
                     </Link>
@@ -46,16 +45,12 @@ const breadcrumbs: BreadcrumbItem[] = [
             <ul class="divide-y">
                 <li v-for="question in questions.data" :key="question.id" class="px-6 py-4">
                     <div class="flex">
-                        <!--                        <div class="mr-4 min-w-14 space-y-2 text-right text-xs text-gray-500">-->
-                        <!--                            <div>{{ question.votes_count }} votes</div>-->
-                        <!--                            <div>{{ question.answers_count }} answers</div>-->
-                        <!--                        </div>-->
                         <ShowUserAvatar :entity="question" class="mr-2" />
 
                         <div class="w-full">
                             <div class="flex justify-between">
-                                <h3 class="mb-1 w-2xl pr-4 text-blue-500">
-                                    <Link :href="route('questions.show', question.id)">
+                                <h3 class="mb-1 w-2xl pr-4 leading-5">
+                                    <Link :href="route('questions.show', question.id)" class="font-medium text-blue-500 hover:text-blue-600/85">
                                         {{ question.title }}
                                     </Link>
                                 </h3>
@@ -79,7 +74,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                             <p class="mb-3 text-sm break-words">{{ question.body.substring(0, 170) }}...</p>
 
                             <div class="flex items-center justify-between gap-2">
-                                <Tags :question="question" />
+                                <Tags :tags="question.tags" />
 
                                 <UserInfoSimpleCard :post="question" simple-badge />
                             </div>

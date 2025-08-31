@@ -7,7 +7,7 @@ import { ref } from 'vue';
 const page = usePage();
 
 const searchForm = useForm({
-    q: page.props.query ?? `[${page.props.tag?.name}]` ?? '',
+    q: page.props.tag ? `[${page.props.tag?.name}]` : (page.props.query ?? ''),
     page: 1,
 });
 

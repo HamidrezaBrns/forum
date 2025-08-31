@@ -27,13 +27,13 @@ const isDisabled = computed(() => processing.value || cannotVote);
 </script>
 
 <template>
-    <div class="text-center text-xl font-medium">
+    <div>
         <button
             @click="toggleVote(true)"
             :disabled="isDisabled"
-            class="cursor-pointer rounded-full border px-2 py-1 hover:opacity-70 disabled:cursor-default"
-            :class="{ 'bg-green-200': post.vote?.is_upvote == true, 'bg-gray-100 text-gray-400': cannotVote }"
-            :title="cannotVote ? 'You can\'t vote your own post': 'Upvote'"
+            class="cursor-pointer rounded-full border px-2 py-1 not-disabled:hover:opacity-70 disabled:cursor-default"
+            :class="{ 'bg-blue-200': post.vote?.is_upvote == true, 'bg-gray-100 text-gray-400': cannotVote }"
+            :title="cannotVote ? 'You can\'t vote your own post' : 'Upvote'"
         >
             <i class="ri-arrow-up-s-fill"></i>
         </button>
@@ -43,9 +43,9 @@ const isDisabled = computed(() => processing.value || cannotVote);
         <button
             @click="toggleVote(false)"
             :disabled="isDisabled"
-            class="cursor-pointer rounded-full border px-2 py-1 hover:opacity-70 disabled:cursor-default"
+            class="cursor-pointer rounded-full border px-2 py-1 not-disabled:hover:opacity-70 disabled:cursor-default"
             :class="{ 'bg-orange-200': post.vote?.is_upvote == false, 'bg-gray-100 text-gray-400': cannotVote }"
-            :title="cannotVote ? 'You can\'t vote your own post': 'Downvote'"
+            :title="cannotVote ? 'You can\'t vote your own post' : 'Downvote'"
         >
             <i class="ri-arrow-down-s-fill"></i>
         </button>

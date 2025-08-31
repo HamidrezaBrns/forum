@@ -2,9 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Answer;
 use App\Models\Question;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -55,6 +57,7 @@ class HandleInertiaRequests extends Middleware
 
             'permissions' => [
                 'create_questions' => $request->user()?->can('create', Question::class),
+//                'create_answer' => $request->user()?->can('create', [Answer::class, ]),
             ]
         ];
     }
