@@ -22,6 +22,7 @@ Route::get('/search', SearchController::class)->name('search');
 
 Route::middleware('auth')->group(function () {
     Route::resource('questions', QuestionController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
+    Route::post('/questions/{question}/answers/{answer}/accept', [QuestionController::class, 'acceptAnswer'])->name('questions.answers.accept');
 
     Route::resource('questions.answers', AnswerController::class)->shallow()->only(['store', 'update', 'destroy']);
 
