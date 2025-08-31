@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\Answer;
 use App\Models\Question;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class QuestionPolicy
 {
@@ -45,6 +45,27 @@ class QuestionPolicy
      */
     public function delete(User $user, Question $question): bool
     {
+        return $user->id === $question->user_id;
+    }
+
+    public function acceptAnswer(User $user, Question $question, Answer $answer): bool
+    {
+        // The selected answer must belong to this question.
+        if ($answer->question_id !== $question->id) {
+            return false;
+        }
+
+        // User can't accept own answer  (handled in answer policy)
+//        if ($answer->user_id === $user->id) {
+//            return false;
+//        }
+
+        // Not allowed for closed question
+//         if ($question->is_closed) {
+//             return false;
+//         }
+
+        // Just owner of the question can accept an answer.
         return $user->id === $question->user_id;
     }
 }

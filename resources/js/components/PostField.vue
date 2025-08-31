@@ -28,7 +28,10 @@ const highlightAll = () => {
 
 <template>
     <div class="flex">
-        <Voting :post="post" class="pr-6 pl-2 border-l-2" />
+        <div class="border-l-2 pr-6 pl-2 text-center text-xl font-medium">
+            <Voting :post="post" class="pb-4" />
+            <AcceptAnswer v-if="answer" :answer="answer" />
+        </div>
 
         <div class="w-full">
             <article class="!prose mb-4 !max-w-none break-after-all dark:!prose-invert prose-pre:max-h-[800px]" v-html="post.body" />

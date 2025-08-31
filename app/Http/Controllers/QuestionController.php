@@ -135,4 +135,18 @@ class QuestionController extends Controller
             'questions' => fn() => QuestionResource::collection($tag->questions()->with(['user', 'tags'])->latest()->latest('id')->paginate()),
         ]);
     }
+
+    public function acceptAnswer(Question $question, Answer $answer)
+    {
+        Gate::authorize('accept', [$answer, $question]);
+        Gate::authorize('accept-answer', [$question, $answer]);
+
+        $question->withoutTimestamps(function () use ($question, $answer) {
+            $question->update([
+                'accepted_answer_id' => $question->accepted_answer_id === $answer->id ? null : $answer->id,
+            ]);
+        });
+
+        return back();
+    }
 }

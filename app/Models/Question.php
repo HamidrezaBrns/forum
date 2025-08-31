@@ -34,6 +34,11 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
+    public function acceptedAnswer(): BelongsTo
+    {
+        return $this->belongsTo(Answer::class, 'accepted_answer_id');
+    }
+
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');

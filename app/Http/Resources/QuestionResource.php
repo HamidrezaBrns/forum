@@ -25,9 +25,11 @@ class QuestionResource extends JsonResource
             'title' => $this->title,
             'body' => $this->body,
             'tags' => $this->whenLoaded('tags', fn() => $this->tags->pluck('name')),
-            'answers_count' => $this->answers_count, // by query
-            'comments_count' => $this->comments_count, // by query
-            'votes_count' => $this->votes_count, // table field
+            'accepted_answer_id' => $this->accepted_answer_id,
+            'answers_count' => $this->answers_count, // by query with count
+            'comments_count' => $this->comments_count, // by query with count
+            'votes_count' => Number::abbreviate($this->votes_count), // table field
+            'views_count' => Number::abbreviate(views($this->resource)->count()),
             'vote' => $this->when(
                 $this->hasAttribute('user-vote') && $request->user(),
                 fn() => VoteResource::make($this->votes()->whereBelongsTo($request->user())->first())
