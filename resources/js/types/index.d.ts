@@ -36,3 +36,24 @@ export interface User {
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
+
+export interface BasePost {
+    id: number;
+    type: string;
+    user: User;
+    body: string;
+    votes_count: number;
+    comments_count: number;
+    views_count: number;
+    can: { update: boolean; delete: boolean; vote: boolean };
+}
+
+export interface Question extends BasePost {
+    title: string;
+    tags: string[];
+    answers_count: number;
+}
+
+export interface Answer extends BasePost {
+    can: BasePost['can'] & { accept: boolean };
+}

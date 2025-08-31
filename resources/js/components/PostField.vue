@@ -1,14 +1,20 @@
 <script setup lang="ts">
+import AcceptAnswer from '@/components/AcceptAnswer.vue';
 import CommentSection from '@/components/CommentSection.vue';
 import Tags from '@/components/Tags.vue';
 import UserInfoPostCard from '@/components/UserInfoPostCard.vue';
 import Voting from '@/components/Voting.vue';
+import { Answer, Question } from '@/types';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.min.css';
-import { onMounted, watch } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 
-// question/answer
-const props = defineProps(['post']);
+const props = defineProps<{
+    post: Question | Answer;
+}>();
+
+const question = computed(() => (props.post.type === 'question' ? (props.post as Question) : null));
+const answer = computed(() => (props.post.type === 'answer' ? (props.post as Answer) : null));
 
 defineEmits(['edit', 'delete']);
 
@@ -34,9 +40,9 @@ const highlightAll = () => {
         </div>
 
         <div class="w-full">
-            <article class="!prose mb-4 !max-w-none break-after-all dark:!prose-invert prose-pre:max-h-[800px]" v-html="post.body" />
+            <article class="!prose mb-4 !max-w-none dark:!prose-invert prose-pre:max-h-[800px]" v-html="post.body" />
 
-            <Tags :question="post" />
+            <Tags v-if="question" :tags="question.tags" />
 
             <div class="mt-4 flex justify-between">
                 <div class="flex space-x-2 text-xs">
@@ -59,11 +65,6 @@ const highlightAll = () => {
 
 <style lang="scss" scoped>
 :deep(code:not(pre code)) {
-    ::before,
-    ::after {
-        content: none !important;
-    }
-
     background-color: #f5f5f5;
     color: #d6336c;
     padding: 2px 4px;
