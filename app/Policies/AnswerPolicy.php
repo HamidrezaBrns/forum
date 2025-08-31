@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Answer;
+use App\Models\Question;
 use App\Models\User;
 
 class AnswerPolicy
@@ -10,9 +11,9 @@ class AnswerPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Question $question): bool
     {
-        return true;
+        return $question->answers()->whereBelongsTo($user)->doesntExist();
     }
 
     /**
@@ -33,5 +34,11 @@ class AnswerPolicy
         }
 
         return $answer->created_at->isAfter(now()->subHour());
+    }
+
+    public function accept(User $user, Answer $answer): bool
+    {
+        // User cannot accept own answer.
+        return $user->id !== $answer->user_id;
     }
 }

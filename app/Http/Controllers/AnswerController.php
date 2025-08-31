@@ -14,7 +14,7 @@ class AnswerController extends Controller
      */
     public function store(Request $request, Question $question)
     {
-        Gate::authorize('create', Answer::class);
+        Gate::authorize('create', [Answer::class, $question]);
 
         $validated = $request->validate([
             'body' => ['required', 'string', 'min:100', 'max:10000'],
