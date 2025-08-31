@@ -156,7 +156,14 @@ const rightNavItems: NavItem[] = [
                         </div>
                     </div>
 
-                    <DropdownMenu v-if="auth.user">
+                    <Link v-if="!auth.user" :href="route('login')">
+                        <Button variant="ghost" type="button" class="cursor-pointer">
+                            <LogIn class="h-4 w-4" />
+                            <span>Log in</span>
+                        </Button>
+                    </Link>
+
+                    <DropdownMenu v-else>
                         <DropdownMenuTrigger :as-child="true">
                             <Button
                                 variant="ghost"
@@ -175,12 +182,6 @@ const rightNavItems: NavItem[] = [
                             <UserMenuContent :user="auth.user" />
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Link v-else :href="route('login')">
-                        <Button variant="ghost" type="button">
-                            <LogIn class="h-4 w-4" />
-                            <span>Log in</span>
-                        </Button>
-                    </Link>
                 </div>
             </div>
         </div>
