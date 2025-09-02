@@ -50,8 +50,9 @@ class DatabaseSeeder extends Seeder
                 ...$answers->random(200)->map(fn(Answer $answer) => ['votable_id' => $answer]),
             ))
             ->create([
-                'name' => 'Hamidreza',
+                'username' => 'HamidrezaBRNS',
                 'email' => 'test@example.com',
+                'name' => 'Hamidreza Barnousi'
             ]);
     }
 }
