@@ -55,10 +55,9 @@ class HandleInertiaRequests extends Middleware
             ],
             'sidebarOpen' => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
 
-            'permissions' => [
-                'create_questions' => $request->user()?->can('create', Question::class),
-//                'create_answer' => $request->user()?->can('create', [Answer::class, ]),
-            ]
+//            'permissions' => [
+//                'create_questions' => $request->user()?->can('create', Question::class),
+//            ]
         ];
     }
 }

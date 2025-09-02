@@ -41,9 +41,5 @@ Route::get('/questions/tagged/{tag:name}', [QuestionController::class, 'tagged']
 Route::get('/questions/{question}/comments', [CommentController::class, 'questionComments'])->name('questions.comments.index');
 Route::get('/answers/{answer}/comments', [CommentController::class, 'answerComments'])->name('answers.comments.index');
 
-//Route::get('test/{question}', function (\App\Models\Question $question) {
-//    return Inertia::optional(fn() => $question->comments()->with('user')->latest()->paginate());
-//});
-
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

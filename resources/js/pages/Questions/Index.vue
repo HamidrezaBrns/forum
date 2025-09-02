@@ -7,7 +7,7 @@ import Container from '@/components/ui/Container.vue';
 import UserInfoSimpleCard from '@/components/UserInfoSimpleCard.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
-import { Eye, MessageSquareQuote, Vote } from 'lucide-vue-next';
+import { Eye, MessageSquare, MessageSquareText, Vote } from 'lucide-vue-next';
 
 defineProps({
     questions: {
@@ -56,17 +56,44 @@ defineProps({
                                 </h3>
 
                                 <div class="flex space-x-6 text-sm text-gray-500">
-                                    <div class="flex gap-0.5" title="Votes">
-                                        <span>{{ question.votes_count }}</span>
+                                    <div :title="`Score of ${question.votes_count}`" class="flex gap-0.5">
+                                        <span>
+                                            {{
+                                                Intl.NumberFormat('en-Us', {
+                                                    notation: 'compact',
+                                                    maximumFractionDigits: 1
+                                                }).format(question.votes_count)
+                                            }}
+                                        </span>
                                         <Vote class="size-5" />
                                     </div>
-                                    <div class="flex gap-0.5" title="Views">
-                                        <span>{{ question.views_count }}</span>
+
+                                    <div :title="`${question.views_count} views`" class="flex gap-0.5">
+                                        <span>
+                                            {{
+                                                Intl.NumberFormat('en-Us', {
+                                                    notation: 'compact',
+                                                    maximumFractionDigits: 1
+                                                }).format(question.views_count)
+                                            }}
+                                        </span>
                                         <Eye class="size-5" />
                                     </div>
-                                    <div class="flex gap-0.5" title="Answers">
-                                        <span>{{ question.answers_count }}</span>
-                                        <MessageSquareQuote class="size-5" />
+
+                                    <div
+                                        :title="question.accepted_answer_id ? 'Has an accepted answer' : `${question.answers_count} answers`"
+                                        class="flex gap-0.5"
+                                        :class="{ 'text-green-700': question.accepted_answer_id }"
+                                    >
+                                        <span>
+                                            {{
+                                                Intl.NumberFormat('en-Us', {
+                                                    notation: 'compact',
+                                                    maximumFractionDigits: 1
+                                                }).format(question.answers_count)
+                                            }}
+                                        </span>
+                                        <Component :is="question.answers_count ? MessageSquareText : MessageSquare" class="size-5" />
                                     </div>
                                 </div>
                             </div>

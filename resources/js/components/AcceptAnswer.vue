@@ -45,7 +45,7 @@ const isAccepted = computed(() => page.props.question.accepted_answer_id === pro
             </button>
         </div>
 
-        <div v-else-if="isAccepted" title="Accepted as correct answer." class="text-4xl font-semibold text-green-700">
+        <div v-else-if="isAccepted" title="The question owner accepted this as the best answer." class="text-4xl font-semibold text-green-700">
             <i class="ri-check-line"></i>
         </div>
     </div>
