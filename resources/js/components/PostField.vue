@@ -39,8 +39,11 @@ const highlightAll = () => {
             <AcceptAnswer v-if="answer" :answer="answer" />
         </div>
 
-        <div class="w-full">
-            <article class="!prose mb-4 !max-w-none dark:!prose-invert prose-pre:max-h-[800px]" v-html="post.body" />
+        <div class="min-w-0 flex-1">
+            <article
+                class="!prose mb-4 !max-w-none break-words dark:!prose-invert prose-a:break-words prose-code:break-words prose-pre:max-h-[800px]"
+                v-html="post.body"
+            />
 
             <Tags v-if="question" :tags="question.tags" />
 
@@ -64,13 +67,8 @@ const highlightAll = () => {
 </template>
 
 <style lang="scss" scoped>
-:deep(code:not(pre code)) {
-    background-color: #f5f5f5;
-    color: #d6336c;
-    padding: 2px 4px;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 0.9em;
+:deep(article) {
+    direction: initial;
 }
 
 :deep([style*='text-align: right']) {
