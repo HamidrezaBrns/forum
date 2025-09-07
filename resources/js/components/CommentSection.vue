@@ -132,7 +132,7 @@ const deleteComment = async (commentId: number) => {
                     <Textarea
                         ref="commentTextarea"
                         v-model="commentForm.body"
-                        class="flex-1 rounded border px-2 py-1 break-all whitespace-break-spaces"
+                        class="flex-1 rounded border px-2 py-1"
                         placeholder="Add a comment…"
                         required
                     />
@@ -151,24 +151,19 @@ const deleteComment = async (commentId: number) => {
             <!-- Comment List -->
             <ul v-else class="divide-y">
                 <li v-for="comment in comments" :key="comment.id" class="py-2">
-                    <div class="flex items-center justify-between">
-                        <UserInfoCommentCard :comment="comment" />
+                    <div :id="`comment-${comment.id}`">
+                        <div class="flex items-center justify-between">
+                            <UserInfoCommentCard :comment="comment" />
 
-                        <div class="flex space-x-2 text-xs">
-                            <!--                    <form v-if="post.can?.update" @submit.prevent="$emit('edit', post.id)">-->
-                            <!--                        <button class="cursor-pointer font-mono text-gray-400 hover:font-bold">EDIT</button>-->
-                            <!--                    </form>-->
-
-                            <!--                    Delete Comment-->
-                            <form v-if="comment.can?.delete" @submit.prevent="deleteComment(comment.id)">
-                                <button class="cursor-pointer font-mono text-red-700 hover:font-bold">DELETE</button>
-                            </form>
+                            <div class="flex space-x-2 text-xs">
+                                <!-- Delete Comment -->
+                                <form v-if="comment.can?.delete" @submit.prevent="deleteComment(comment.id)">
+                                    <button class="cursor-pointer font-mono text-red-700 hover:font-bold">DELETE</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="flex">
-                        <div class="w-10"></div>
-                        <div class="text-sm leading-4.5 wrap-anywhere">
+                        <div class="ml-10 text-sm leading-4.5 wrap-anywhere">
                             {{ comment.body }}
                         </div>
                     </div>

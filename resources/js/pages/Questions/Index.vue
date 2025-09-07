@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import QuestionStats from '@/components/QuestionStats.vue';
 import ShowUserAvatar from '@/components/ShowUserAvatar.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
 import Tags from '@/components/Tags.vue';
@@ -7,7 +8,6 @@ import Container from '@/components/ui/Container.vue';
 import UserInfoSimpleCard from '@/components/UserInfoSimpleCard.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
-import { Eye, MessageSquare, MessageSquareText, Vote } from 'lucide-vue-next';
 
 defineProps({
     questions: {
@@ -24,86 +24,61 @@ defineProps({
 
     <AppLayout>
         <Container>
-            <div v-if="tag" class="border-b px-6 pb-4">
-                <h1 class="mb-2 text-3xl font-bold">
-                    [{{ tag.name }}] <span class="text-sm font-medium">{{ questions.meta.total }} Questions</span>
-                </h1>
+            <div class="border-b px-6 pb-4">
+                <template v-if="tag">
+                    <h1 class="mb-2 text-3xl font-bold">
+                        [{{ tag.name }}] <span class="text-sm font-medium">{{ questions.meta.total }} Questions</span>
+                    </h1>
 
-                <p class="text-sm">{{ tag.description }}</p>
-            </div>
+                    <p class="text-sm">{{ tag.description }}</p>
+                </template>
 
-            <div v-else class="flex justify-between border-b px-6 pb-4">
-                <h1 class="text-3xl font-medium">{{ questions.meta.total }} Questions</h1>
+                <template v-else>
+                    <div class="flex flex-wrap justify-between">
+                        <h1 class="text-3xl font-medium">{{ questions.meta.total }} Questions</h1>
 
-                <div>
-                    <Link :href="route('questions.create')">
-                        <Button type="button">Ask Question</Button>
-                    </Link>
-                </div>
+                        <Link :href="route('questions.create')">
+                            <Button variant="outline" type="button">Ask Question</Button>
+                        </Link>
+                    </div>
+                </template>
             </div>
 
             <ul class="divide-y">
-                <li v-for="question in questions.data" :key="question.id" class="px-6 py-4">
-                    <div class="flex">
-                        <ShowUserAvatar :entity="question" class="mr-2" />
+                <li
+                    v-for="question in questions.data"
+                    :key="question.id"
+                    class="p-4 transition-colors hover:bg-gray-50 sm:px-6 dark:hover:bg-gray-950"
+                >
+                    <div class="flex items-start gap-3">
+                        <component
+                            :is="question.user ? Link : 'div'"
+                            v-bind="question.user ? { href: route('profile.activities', question.user.username) } : {}"
+                        >
+                            <ShowUserAvatar :entity="question" class="size-10 flex-shrink-0" />
+                        </component>
 
-                        <div class="w-full">
-                            <div class="flex justify-between">
-                                <h3 class="mb-1 w-2xl pr-4 leading-5">
-                                    <Link :href="route('questions.show', question.id)" class="font-medium text-blue-500 hover:text-blue-600/85">
-                                        {{ question.title }}
-                                    </Link>
-                                </h3>
-
-                                <div class="flex space-x-6 text-sm text-gray-500">
-                                    <div :title="`Score of ${question.votes_count}`" class="flex gap-0.5">
-                                        <span>
-                                            {{
-                                                Intl.NumberFormat('en-Us', {
-                                                    notation: 'compact',
-                                                    maximumFractionDigits: 1
-                                                }).format(question.votes_count)
-                                            }}
-                                        </span>
-                                        <Vote class="size-5" />
-                                    </div>
-
-                                    <div :title="`${question.views_count} views`" class="flex gap-0.5">
-                                        <span>
-                                            {{
-                                                Intl.NumberFormat('en-Us', {
-                                                    notation: 'compact',
-                                                    maximumFractionDigits: 1
-                                                }).format(question.views_count)
-                                            }}
-                                        </span>
-                                        <Eye class="size-5" />
-                                    </div>
-
-                                    <div
-                                        :title="question.accepted_answer_id ? 'Has an accepted answer' : `${question.answers_count} answers`"
-                                        class="flex gap-0.5"
-                                        :class="{ 'text-green-700': question.accepted_answer_id }"
+                        <div class="flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                            <div class="min-w-0 sm:pr-10">
+                                <Link :href="route('questions.show', question.id)" class="group" :title="question.title">
+                                    <h3
+                                        class="mb-1 line-clamp-2 text-base leading-5 font-medium break-words group-hover:underline sm:line-clamp-1 sm:text-lg"
                                     >
-                                        <span>
-                                            {{
-                                                Intl.NumberFormat('en-Us', {
-                                                    notation: 'compact',
-                                                    maximumFractionDigits: 1
-                                                }).format(question.answers_count)
-                                            }}
-                                        </span>
-                                        <Component :is="question.answers_count ? MessageSquareText : MessageSquare" class="size-5" />
-                                    </div>
-                                </div>
+                                        {{ question.title }}
+                                    </h3>
+                                    <p
+                                        class="line-clamp-2 text-sm break-words text-gray-500 sm:line-clamp-1 dark:text-gray-400"
+                                        v-html="question.body"
+                                    ></p>
+                                </Link>
+
+                                <Tags :tags="question.tags" class="mt-2 sm:mt-3" />
                             </div>
 
-                            <p class="mb-3 text-sm break-words">{{ question.body.substring(0, 170) }}...</p>
+                            <div class="flex flex-shrink-0 flex-col items-start gap-2 text-sm text-gray-500 sm:items-end">
+                                <QuestionStats :question="question" />
 
-                            <div class="flex items-center justify-between gap-2">
-                                <Tags :tags="question.tags" />
-
-                                <UserInfoSimpleCard :post="question" simple-badge />
+                                <UserInfoSimpleCard :post="question" />
                             </div>
                         </div>
                     </div>
@@ -114,3 +89,9 @@ defineProps({
         </Container>
     </AppLayout>
 </template>
+
+<style lang="scss" scoped>
+:deep([style*='text-align: right']) {
+    direction: rtl;
+}
+</style>

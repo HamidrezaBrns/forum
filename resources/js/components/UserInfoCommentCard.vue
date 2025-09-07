@@ -1,37 +1,31 @@
 <script setup lang="ts">
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getInitials } from '@/composables/useInitials';
+import ShowUserAvatar from '@/components/ShowUserAvatar.vue';
+import { User } from '@/types';
 import { relativeDate } from '@/utilities/date';
+import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
-const props = defineProps({
+const props = defineProps<{
     comment: {
-        type: Object,
-        required: true,
-    },
-});
+        user: User;
+        created_at: string;
+    };
+}>();
 
-// Compute whether we should show the avatar image
-const showAvatar = computed(() => props.comment.user.avatar && props.comment.user.avatar !== '');
+const profileLink = computed(() => (props.comment.user ? route('profile.activities', props.comment.user.username) : null));
 </script>
 
 <template>
-    <div class="">
-        <div class="flex items-center gap-2">
-            <div>
-                <Avatar class="h-8 w-8 overflow-hidden rounded-lg">
-                    <AvatarImage v-if="showAvatar" :src="comment.user.avatar!" :alt="comment.user.name" />
-                    <AvatarFallback class="rounded-lg text-black dark:text-white">
-                        {{ getInitials(comment.user.name) }}
-                    </AvatarFallback>
-                </Avatar>
-            </div>
+    <div class="flex items-center gap-1 text-xs">
+        <component
+            :is="profileLink ? Link : 'div'"
+            v-bind="profileLink ? { href: profileLink, class: 'group' } : {}"
+            class="inline-flex items-center gap-2"
+        >
+            <ShowUserAvatar :entity="comment" />
+            <div class="font-semibold group-hover:underline">{{ comment.user?.username ?? '[Deleted User]' }}│</div>
+        </component>
 
-            <div class="space-x-1 text-xs text-gray-500">
-                <span class="font-semibold">{{ comment.user.name }}<span>│</span></span>
-                <span>{{ relativeDate(comment.created_at) }}</span>
-                <span v-if="comment.created_at !== comment.updated_at"><span>●</span> edited {{ relativeDate(comment.updated_at) }}</span>
-            </div>
-        </div>
+        <span>{{ relativeDate(comment.created_at) }}</span>
     </div>
 </template>

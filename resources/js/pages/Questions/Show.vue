@@ -125,13 +125,11 @@ const deleteQuestion = async (questionId: number) => {
     <Head :title="question.title" />
 
     <AppLayout>
-        <Container>
+        <Container class="lg:max-w-[1000px]">
             <!-- question -->
-            <div>
-                <div class="border-b-4 border-dashed">
-                    <h1 class="mb-6 ml-2 text-2xl font-bold">{{ question.title }}</h1>
-                    <PostField class="mb-4" :post="question" @edit="editQuestion" @delete="deleteQuestion" />
-                </div>
+            <div class="border-b-4 border-dashed">
+                <h1 class="mb-6 ml-2 text-2xl font-bold break-words">{{ question.title }}</h1>
+                <PostField class="mb-4" :post="question" @edit="editQuestion" @delete="deleteQuestion" />
             </div>
 
             <!-- answers -->
@@ -139,13 +137,13 @@ const deleteQuestion = async (questionId: number) => {
                 <div class="mt-6">
                     <Heading
                         :title="`${answers.meta.total} ${answers.meta.total > 1 ? 'Answers' : 'Answer'}`"
-                        description="Your replies are sorted by posting time."
+                        description="Your answers are sorted first by highest score, then by posting time."
                         class="ml-2"
                     />
 
                     <div class="divide-y-2">
                         <div v-for="answer in answers.data" :key="answer.id">
-                            <PostField :post="answer" class="py-4" @edit="editAnswer" @delete="deleteAnswer" />
+                            <PostField ref="answersDiv" :post="answer" class="py-4" @edit="editAnswer" @delete="deleteAnswer" />
                         </div>
                     </div>
 
@@ -155,7 +153,7 @@ const deleteQuestion = async (questionId: number) => {
                 <div v-if="$page.props.auth.user">
                     <div v-if="!question.can?.create_answer && !editingAnswer" class="mt-6 rounded bg-amber-100 px-2 text-amber-800">
                         You have already submitted an answer to this question. If you want to change it, you can
-                        <Button variant="link" size="icon" @click="editAnswer(userAnswer.id)" class="cursor-pointer text-blue-500">edit</Button>
+                        <Button variant="link" size="icon" @click="editAnswer(userAnswer.id)" class="cursor-pointer text-blue-500">edit </Button>
                         it.
                     </div>
 

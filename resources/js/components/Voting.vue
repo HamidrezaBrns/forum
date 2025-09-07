@@ -32,7 +32,7 @@ const isDisabled = computed(() => processing.value || cannotVote);
             @click="toggleVote(true)"
             :disabled="isDisabled"
             class="cursor-pointer rounded-full border px-2 py-1 not-disabled:hover:opacity-70 disabled:cursor-default"
-            :class="{ 'bg-blue-200': post.vote?.is_upvote == true, 'bg-gray-100 text-gray-400': cannotVote }"
+            :class="{ 'bg-teal-100 dark:bg-teal-900': post.vote?.is_upvote == true, 'bg-gray-100 text-gray-400': cannotVote }"
             :title="cannotVote ? 'You can\'t vote your own post' : 'Upvote'"
         >
             <i class="ri-arrow-up-s-fill"></i>
@@ -44,7 +44,7 @@ const isDisabled = computed(() => processing.value || cannotVote);
             @click="toggleVote(false)"
             :disabled="isDisabled"
             class="cursor-pointer rounded-full border px-2 py-1 not-disabled:hover:opacity-70 disabled:cursor-default"
-            :class="{ 'bg-orange-200': post.vote?.is_upvote == false, 'bg-gray-100 text-gray-400': cannotVote }"
+            :class="{ 'bg-teal-100 dark:bg-teal-900': post.vote?.is_upvote == false, 'bg-gray-100 text-gray-400': cannotVote }"
             :title="cannotVote ? 'You can\'t vote your own post' : 'Downvote'"
         >
             <i class="ri-arrow-down-s-fill"></i>

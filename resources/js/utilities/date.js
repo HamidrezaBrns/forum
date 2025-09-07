@@ -12,4 +12,13 @@ const formattedDate = () =>
         minute: '2-digit',
     });
 
-export { formattedDate, relativeDate };
+const formatDate = (date) =>
+    new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    }).format(new Date(date));
+
+export { formatDate, formattedDate, relativeDate };

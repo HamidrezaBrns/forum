@@ -7,11 +7,11 @@ defineProps({
 </script>
 
 <template>
-    <ul class="flex gap-1.5 text-xs">
+    <ul class="flex flex-wrap gap-1.5 text-xs">
         <li v-for="(tag, index) in tags" :key="index">
             <Link
                 :href="route('questions.tagged', tag)"
-                class="inline-block rounded bg-gray-100 px-1.5 py-1 font-semibold text-gray-600 hover:bg-gray-200 hover:text-black"
+                class="inline-block rounded bg-gray-200 dark:bg-gray-800 dark:text-gray-400 px-1.5 py-0.5 font-semibold text-gray-600 hover:opacity-60 hover:text-black"
             >
                 {{ tag }}
             </Link>
