@@ -54,6 +54,8 @@ export interface BasePost {
     votes_count: number;
     comments_count: number;
     views_count: number;
+    created_at: string;
+    updated_at: string;
     can: { update: boolean; delete: boolean; vote: boolean };
 }
 
@@ -61,6 +63,7 @@ export interface Question extends BasePost {
     title: string;
     tags: string[];
     answers_count: number;
+    accepted_answer_id: number;
 }
 
 export interface Answer extends BasePost {
