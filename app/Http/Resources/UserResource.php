@@ -16,10 +16,20 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'username' => $this->username,
             'email' => $this->when($this->id === $request->user()?->id, $this->email),
-            'created_at' => $this->when($this->id === $request->user()?->id, $this->created_at),
-            'updated_at' => $this->when($this->id === $request->user()?->id, $this->updated_at),
+
+            'name' => $this->name,
+            'avatar' => $this->avatar,
+            'bio' => $this->bio,
+            'job_title' => $this->job_title,
+            'location' => $this->location,
+            'website' => $this->website,
+            'github' => $this->github,
+            'twitter' => $this->twitter,
+
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
