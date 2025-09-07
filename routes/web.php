@@ -2,22 +2,20 @@
 
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VoteController;
-use App\Http\Resources\QuestionResource;
-use App\Models\Answer;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-//    return Inertia::render('Welcome');
     return to_route('questions.index');
 })->name('home');
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+//Route::get('dashboard', function () {
+//    return Inertia::render('Dashboard');
+//})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/search', SearchController::class)->name('search');
 
@@ -40,6 +38,12 @@ Route::get('/questions/tagged/{tag:name}', [QuestionController::class, 'tagged']
 
 Route::get('/questions/{question}/comments', [CommentController::class, 'questionComments'])->name('questions.comments.index');
 Route::get('/answers/{answer}/comments', [CommentController::class, 'answerComments'])->name('answers.comments.index');
+
+Route::get('/@{user:username}', ProfileController::class)->name('profile.activities');
+
+//Route::get('/@{user:username}', function (User $user) {
+//    return $user->activities()->with(['subject'])->latest()->paginate();
+//});
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
