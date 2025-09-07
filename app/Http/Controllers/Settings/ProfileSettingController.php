@@ -3,31 +3,21 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Settings\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ProfileController extends Controller
+class ProfileSettingController extends Controller
 {
-    /**
-     * Show the user's profile settings page.
-     */
     public function edit(): Response
     {
-        return Inertia::render('settings/Account/Profile');
+        return Inertia::render('Settings/Account/ProfileSetting');
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(Request $request): RedirectResponse
     {
-        dd($request->all(), $request->post(), $request->input(), $request->file());
         $validated = $request->validate([
             'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'name' => ['nullable', 'string', 'max:255'],
@@ -41,12 +31,14 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        if ($request->hasFile('avatar')) {
+        if ($request->hasFile('avatar') || $request->avatar === null) {
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }
+        }
 
-            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        if ($request->hasFile('avatar')) {
+            $validated['avatar'] = $request->avatar->store('avatars', 'public');
         }
 
         $user->update($validated);
