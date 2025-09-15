@@ -16,8 +16,12 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->restrictOnDelete();
             $table->foreignIdFor(Question::class)->constrained()->cascadeOnDelete();
+
             $table->longText('body');
+
             $table->integer('votes_count')->default(0);
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

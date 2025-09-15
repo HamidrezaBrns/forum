@@ -126,7 +126,7 @@ class QuestionController extends Controller
     {
         Gate::authorize('delete', $question);
 
-        $question->delete();
+        $question->delete();  // soft delete
 
         return to_route('questions.index');
     }

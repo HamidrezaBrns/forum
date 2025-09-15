@@ -66,7 +66,7 @@ class CredentialSettingController extends Controller
 
         Auth::logout();
 
-        $user->delete();
+        $user->delete();  // soft delete
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

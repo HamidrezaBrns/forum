@@ -51,6 +51,27 @@ class QuestionPolicy
         return $user->id === $question->user_id;
     }
 
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user, Question $question): bool
+    {
+        return $user->is_admin;
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user, Question $question): bool
+    {
+        return $user->is_admin;
+    }
+
+    public function close(User $user, Question $question): bool
+    {
+        return $user->id === $question->user_id;
+    }
+
     public function acceptAnswer(User $user, Question $question, Answer $answer): bool
     {
         // The selected answer must belong to this question.

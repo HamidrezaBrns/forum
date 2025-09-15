@@ -52,7 +52,7 @@ class AnswerController extends Controller
     {
         Gate::authorize('delete', $answer);
 
-        $answer->delete();
+        $answer->delete();  // soft delete
 
         return to_route('questions.show', ['question' => $answer->question_id, 'page' => $request->query('page')]);
     }
