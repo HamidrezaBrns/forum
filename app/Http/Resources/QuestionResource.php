@@ -40,6 +40,9 @@ class QuestionResource extends JsonResource
                 'vote' => VoteResource::make($this->votes()->whereBelongsTo($request->user())->first())
             ]), //
 
+            'status' => $this->status,
+
+            'closed_at' => $this->closed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
 

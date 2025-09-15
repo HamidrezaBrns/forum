@@ -2,12 +2,15 @@
 import AcceptAnswer from '@/components/AcceptAnswer.vue';
 import CommentSection from '@/components/CommentSection.vue';
 import Tags from '@/components/Tags.vue';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import UserInfoPostCard from '@/components/UserInfoPostCard.vue';
 import Voting from '@/components/Voting.vue';
 import { Answer, Question } from '@/types';
 import { formatFull } from '@/utilities/date';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.min.css';
+import { Pause, PencilLine, Trash2 } from 'lucide-vue-next';
 import { computed, onMounted, watch } from 'vue';
 
 const props = defineProps<{
@@ -17,15 +20,14 @@ const props = defineProps<{
 const question = computed(() => (props.post.type === 'question' ? (props.post as Question) : null));
 const answer = computed(() => (props.post.type === 'answer' ? (props.post as Answer) : null));
 
-defineEmits(['edit', 'delete']);
+defineEmits(['close', 'edit', 'delete']);
 
+//
 onMounted(() => highlightAll());
-
 watch(
     () => props.post.body,
     () => highlightAll(),
 );
-
 const highlightAll = () => {
     document.querySelectorAll('pre code:not([data-highlighted])').forEach((el) => {
         hljs.highlightElement(el as HTMLElement);
@@ -48,15 +50,37 @@ const highlightAll = () => {
 
             <Tags v-if="question" :tags="question.tags" />
 
-            <div class="mt-4 flex justify-between">
-                <div class="flex space-x-2 text-xs">
-                    <form v-if="post.can?.update" @submit.prevent="$emit('edit', post.id)">
-                        <button class="cursor-pointer font-mono text-gray-400 hover:font-bold">EDIT</button>
-                    </form>
+            <div class="mt-6 flex justify-between">
+                <div class="flex space-x-2">
+                    <template v-if="question?.status === 'open'">
+                        <form v-if="question && question.can?.close" @submit.prevent="$emit('close', post.id)">
+                            <Button variant="outline">
+                                <Pause />
+                                Close
+                            </Button>
+                        </form>
 
-                    <form v-if="post.can?.delete" @submit.prevent="$emit('delete', post.id)">
-                        <button class="cursor-pointer font-mono text-red-700 hover:font-bold">DELETE</button>
-                    </form>
+                        <form v-if="post.can?.update" @submit.prevent="$emit('edit', post.id)">
+                            <Button variant="outline">
+                                <PencilLine />
+                                Edit
+                            </Button>
+                        </form>
+
+                        <form v-if="post.can?.delete" @submit.prevent="$emit('delete', post.id)">
+                            <Button variant="outline">
+                                <Trash2 />
+                                Delete
+                            </Button>
+                        </form>
+                    </template>
+
+                    <Card v-else-if="question && question.closed_at" class="self-start font-medium text-amber-800">
+                        <CardContent>
+                            <i class="ri-alarm-warning-line text-xl"></i>
+                            Question has been closed on <span>{{ formatFull(question.closed_at) }}</span>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 <UserInfoPostCard :post="post" />

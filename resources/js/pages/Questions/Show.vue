@@ -6,7 +6,7 @@ import InputError from '@/components/InputError.vue';
 import PostField from '@/components/PostField.vue';
 import TiptapEditor from '@/components/TiptapEditor.vue';
 import { Button } from '@/components/ui/button';
-import Container from '@/components/ui/Container.vue';
+import { Card, CardContent } from '@/components/ui/card';
 import { useConfirm } from '@/composables/useConfirm';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Answer } from '@/types';
@@ -120,6 +120,28 @@ const deleteQuestion = async (questionId: number) => {
         },
     });
 };
+
+const closeQuestion = async (questionId: number) => {
+    if (
+        !(await confirmation(
+            'Close Question',
+            'Are you sure you want to close this question? Closing a question prevents users from submitting or editing answers.',
+        ))
+    ) {
+        return;
+    }
+
+    router.patch(
+        route('questions.close', questionId),
+        {},
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.info('Question has been closed.');
+            },
+        },
+    );
+};
 </script>
 
 <template>
@@ -130,7 +152,7 @@ const deleteQuestion = async (questionId: number) => {
             <!-- question -->
             <div class="border-b-4 border-dashed">
                 <h1 class="mb-6 ml-2 text-2xl font-bold break-words">{{ question.title }}</h1>
-                <PostField class="mb-4" :post="question" @edit="editQuestion" @delete="deleteQuestion" />
+                <PostField class="mb-4" :post="question" @close="closeQuestion" @edit="editQuestion" @delete="deleteQuestion" />
             </div>
 
             <!-- answers -->
@@ -152,11 +174,21 @@ const deleteQuestion = async (questionId: number) => {
                 </div>
 
                 <div v-if="$page.props.auth.user">
-                    <div v-if="!question.can?.create_answer && !editingAnswer" class="mt-6 rounded bg-amber-100 px-2 text-amber-800">
-                        You have already submitted an answer to this question. If you want to change it, you can
-                        <Button variant="link" size="icon" @click="editAnswer(userAnswer.id)" class="cursor-pointer text-blue-500">edit </Button>
-                        it.
-                    </div>
+                    <Card v-if="question.status === 'closed'" class="text-amber-800 font-medium">
+                        <CardContent>
+                            <i class="ri-alarm-warning-line text-xl"></i>
+                            <span>This question has been closed by owner, you can no longer submit or edit your answer.</span>
+                        </CardContent>
+                    </Card>
+
+                    <Card v-else-if="!question.can?.create_answer && !editingAnswer" class="text-amber-800 font-medium">
+                        <CardContent>
+                            <i class="ri-alarm-warning-line text-xl"></i>
+                            You have already submitted an answer to this question. You can still
+                            <Button variant="link" size="icon" @click="editAnswer(userAnswer.id)" class="cursor-pointer text-blue-500">edit </Button>
+                            it.
+                        </CardContent>
+                    </Card>
 
                     <form v-else @submit.prevent="() => (answerIdBeingEdited ? updateAnswer() : addAnswer())">
                         <h2 class="mt-8 mb-5 text-lg font-medium"><i class="ri-question-answer-fill"></i> Your Answer</h2>
