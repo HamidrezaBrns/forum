@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ShowUserAvatar from '@/components/ShowUserAvatar.vue';
 import { User } from '@/types';
-import { relativeDate } from '@/utilities/date';
+import { formatRelative } from '@/utilities/date';
 import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
@@ -26,6 +26,6 @@ const profileLink = computed(() => (props.comment.user ? route('profile.activiti
             <div class="font-semibold group-hover:underline">{{ comment.user?.username ?? '[Deleted User]' }}│</div>
         </component>
 
-        <span>{{ relativeDate(comment.created_at) }}</span>
+        <span>{{ formatRelative(comment.created_at) }}</span>
     </div>
 </template>

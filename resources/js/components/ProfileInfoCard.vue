@@ -3,7 +3,7 @@ import ShowUserAvatar from '@/components/ShowUserAvatar.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { User } from '@/types';
-import { relativeDate } from '@/utilities/date';
+import { formatRelative } from '@/utilities/date';
 import { Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
@@ -45,7 +45,7 @@ const isAuthUser = computed(() => props.user?.username === authUser?.username);
                 </div>
                 <div v-if="user.created_at" class="flex items-center justify-between">
                     <dt class="font-medium text-slate-500"><i class="ri-time-line"></i> Member Since</dt>
-                    <dt>{{ relativeDate(user.created_at) }}</dt>
+                    <dt>{{ formatRelative(user.created_at) }}</dt>
                 </div>
                 <div v-if="user.job_title" class="flex items-center justify-between">
                     <dt class="font-medium text-slate-500"><i class="ri-briefcase-line"></i> Profession</dt>

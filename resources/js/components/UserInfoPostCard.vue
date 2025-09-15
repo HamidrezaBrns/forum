@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ShowUserAvatar from '@/components/ShowUserAvatar.vue';
 import { Answer, Question } from '@/types';
-import { relativeDate } from '@/utilities/date';
+import { formatRelative } from '@/utilities/date';
 import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
@@ -18,8 +18,8 @@ const profileLink = computed(() => (props.post.user ? route('profile.activities'
 <template>
     <div class="w-[210px] rounded bg-blue-100 px-1.5 py-2 text-gray-600 dark:bg-slate-700 dark:text-gray-300">
         <ul class="mb-1 list-inside list-disc text-xs">
-            <li>{{ actionText }} {{ relativeDate(post.created_at) }}</li>
-            <li v-if="isEdited">edited {{ relativeDate(post.updated_at) }}</li>
+            <li>{{ actionText }} {{ formatRelative(post.created_at) }}</li>
+            <li v-if="isEdited">edited {{ formatRelative(post.updated_at) }}</li>
         </ul>
 
         <component
@@ -28,7 +28,7 @@ const profileLink = computed(() => (props.post.user ? route('profile.activities'
             class="inline-flex items-center gap-2"
         >
             <ShowUserAvatar :entity="post" class="size-10" />
-            <div class="font-semibold text-sm" :class="profileLink ? 'group-hover:underline' : ''">
+            <div class="text-sm font-semibold" :class="profileLink ? 'group-hover:underline' : ''">
                 {{ post.user?.username ?? '[Deleted User]' }}
             </div>
         </component>

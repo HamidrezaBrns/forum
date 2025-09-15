@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import UserInfoCommentCard from '@/components/UserInfoCommentCard.vue';
 import { useConfirm } from '@/composables/useConfirm';
-import { formattedDate } from '@/utilities/date';
+import { formatFull } from '@/utilities/date';
 import { router, useForm } from '@inertiajs/vue3';
 import axios from 'axios';
 import { nextTick, ref, useTemplateRef } from 'vue';
@@ -75,7 +75,7 @@ const addComment = () => {
             fetchComments(); // reload the list from backend
             showComments.value = true;
             toast.success('Comment successfully created.', {
-                description: formattedDate,
+                description: formatFull(),
             });
         },
     });

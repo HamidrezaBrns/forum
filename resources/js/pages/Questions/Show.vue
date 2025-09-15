@@ -9,7 +9,7 @@ import Container from '@/components/ui/Container.vue';
 import { useConfirm } from '@/composables/useConfirm';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Answer } from '@/types';
-import { formattedDate } from '@/utilities/date';
+import { formatFull } from '@/utilities/date';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 import { computed, nextTick, ref, useTemplateRef } from 'vue';
@@ -58,7 +58,7 @@ const addAnswer = () =>
         onSuccess: () => {
             answerForm.reset();
             toast.success('Answer successfully created.', {
-                description: formattedDate,
+                description: () => formatFull(),
             });
         },
     });
@@ -84,7 +84,7 @@ const updateAnswer = async () => {
             onSuccess: () => {
                 cancelEditAnswer();
                 toast('Your answer successfully edited.', {
-                    description: formattedDate,
+                    description: formatFull(),
                 });
             },
         },

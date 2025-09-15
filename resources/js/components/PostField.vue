@@ -5,6 +5,7 @@ import Tags from '@/components/Tags.vue';
 import UserInfoPostCard from '@/components/UserInfoPostCard.vue';
 import Voting from '@/components/Voting.vue';
 import { Answer, Question } from '@/types';
+import { formatFull } from '@/utilities/date';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.min.css';
 import { computed, onMounted, watch } from 'vue';

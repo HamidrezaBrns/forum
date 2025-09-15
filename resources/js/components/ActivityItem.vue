@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatDate } from '@/utilities/date';
+import { formatFull } from '@/utilities/date';
 import { Link } from '@inertiajs/vue3';
 import { CircleAlert, MailQuestion, MessageSquareMore, MessagesSquare, ThumbsDown, ThumbsUp } from 'lucide-vue-next';
 import { computed } from 'vue';
@@ -81,7 +81,7 @@ const activityConfig = computed(() => {
 
         <!-- Content -->
         <div class="ml-6 min-w-0 rounded-md bg-gray-100 px-4 py-2 dark:bg-gray-800">
-            <div class="mt-1 text-sm text-gray-500">{{ formatDate(activity.created_at) }}</div>
+            <div class="mt-1 text-sm text-gray-500">{{ formatFull(activity.created_at) }}</div>
 
             <div class="line-clamp-1 min-w-0 text-lg font-medium">
                 {{ activityConfig.label }}
