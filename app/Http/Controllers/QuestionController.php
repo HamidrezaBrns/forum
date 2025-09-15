@@ -32,7 +32,9 @@ class QuestionController extends Controller
     {
         Gate::authorize('create', Question::class);
 
-        return inertia('Questions/Create');
+        return inertia('Questions/Create', [
+            'tags' => fn() => Tag::select(['id', 'name'])->get(),
+        ]);
     }
 
     /**
@@ -45,7 +47,10 @@ class QuestionController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'min:10', 'max:120'],
             'body' => ['required', 'string', 'min:100', 'max:10000'],
-            'tags' => ['nullable'],
+            'tags' => ['nullable', 'array', 'max:5'],
+            'tags.*' => ['string', 'exists:tags,name'],
+        ], [
+            'tags.*.exists' => 'Some of the selected tags are invalid.',
         ]);
 
         $question = Question::create([
@@ -53,11 +58,9 @@ class QuestionController extends Controller
             'user_id' => $request->user()->id,
         ]);
 
-        if ($validated['tags']) {
-            foreach (explode(' ', $validated['tags']) as $tag) {
-                $tag = Tag::where(['name' => $tag])->first();
-                $question->tags()->attach($tag);
-            }
+        if (!empty($validated['tags'])) {
+            $tagIds = Tag::whereIn('name', $validated['tags'])->pluck('id')->toArray();
+            $question->tags()->sync($tagIds);
         }
 
         return to_route('questions.show', $question);
@@ -88,6 +91,7 @@ class QuestionController extends Controller
         $question->load('tags');
 
         return inertia('Questions/Edit', [
+            'tags' => fn() => Tag::select(['id', 'name'])->get(),
             'question' => fn() => QuestionResource::make($question),
         ]);
     }
@@ -98,9 +102,6 @@ class QuestionController extends Controller
     public function update(Request $request, Question $question)
     {
         Gate::authorize('update', $question);
-
-        $tags = array_filter(explode(' ', trim($request->tags)));
-        $request->merge(['tags' => $tags]);
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'min:10', 'max:120'],
@@ -113,7 +114,7 @@ class QuestionController extends Controller
 
         $question->update(Arr::except($validated, 'tags'));
 
-        $tagIds = Tag::whereIn('name', $tags)->pluck('id')->toArray();
+        $tagIds = Tag::whereIn('name', $validated['tags'] ?? [])->pluck('id')->toArray();
         $question->tags()->sync($tagIds);
 
         return to_route('questions.show', $question);
