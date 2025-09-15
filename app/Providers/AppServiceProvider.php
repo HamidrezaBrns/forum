@@ -13,6 +13,7 @@ use App\Observers\QuestionObserver;
 use App\Observers\VoteObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 
@@ -49,5 +50,10 @@ class AppServiceProvider extends ServiceProvider
         Answer::observe(AnswerObserver::class);
         Comment::observe(CommentObserver::class);
         Vote::observe(VoteObserver::class);
+
+        Request::macro('sortParams', fn($default_sort = 'created_at', $default_dir = 'desc'): array => [
+            'sort' => $this->query('sort', $default_sort),
+            'dir' => $this->query('dir', $default_dir),
+        ]);
     }
 }
