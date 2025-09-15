@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import Container from '@/components/Container.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
+import TagSelector from '@/components/TagSelector.vue';
 import TiptapEditor from '@/components/TiptapEditor.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,34 +10,52 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
-import Container from '@/components/ui/Container.vue';
+import { computed } from 'vue';
+import { toast } from 'vue-sonner';
+
+const props = defineProps<{
+    tags: { id: number; name: string }[];
+}>();
 
 const questionForm = useForm({
     title: '',
-    tags: '',
+    tags: [] as string[],
     body: '',
 });
 
-const createQuestion = () => questionForm.post(route('questions.store'));
+const tagError = computed(() => {
+    if (questionForm.errors.tags) {
+        return questionForm.errors.tags;
+    }
+
+    const tagKey = Object.keys(questionForm.errors).find((key) => key.startsWith('tags.'));
+    return tagKey ? questionForm.errors[tagKey] : null;
+});
+
+const createQuestion = () =>
+    questionForm.post(route('questions.store'), {
+        onSuccess: () => toast.success('Your question created successfully.'),
+    });
 </script>
+
 <template>
     <Head title="Ask Question" />
 
     <AppLayout>
-        <Container>
+        <Container class="lg:max-w-[1000px]">
             <Heading title="Ask a question" />
 
             <form @submit.prevent="createQuestion">
                 <div class="mb-4">
                     <Label for="title" class="mb-1">Title</Label>
-                    <Input id="title" type="text" autofocus v-model="questionForm.title" placeholder="Get to the point..." />
+                    <Input id="title" type="text" autofocus v-model="questionForm.title" placeholder="Write a clear, concise question..." />
                     <InputError :message="questionForm.errors.title" class="mt-1" />
                 </div>
 
                 <div class="mb-4">
                     <Label for="tags" class="mb-1">Tags</Label>
-                    <Input id="tags" type="text" autofocus v-model="questionForm.tags" placeholder="e.g. (php laravel linux)" />
-                    <InputError :message="questionForm.errors.tags" class="mt-1" />
+                    <TagSelector :available-tags="tags" v-model="questionForm.tags" />
+                    <InputError :message="tagError" class="mt-1" />
                 </div>
 
                 <div class="mb-4">

@@ -1,34 +1,54 @@
 <script setup lang="ts">
+import Container from '@/components/Container.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
+import TagSelector from '@/components/TagSelector.vue';
 import TiptapEditor from '@/components/TiptapEditor.vue';
 import { Button } from '@/components/ui/button';
-import Container from '@/components/ui/Container.vue';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useConfirm } from '@/composables/useConfirm';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { formattedDate } from '@/utilities/date';
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { Question } from '@/types';
+import { formatFull } from '@/utilities/date';
+import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
+import { computed, ref, watchEffect } from 'vue';
 import { toast } from 'vue-sonner';
 
-const props = defineProps(['question']);
+const props = defineProps<{
+    question: Question;
+    tags: { id: number; name: string }[];
+}>();
 
 const questionForm = useForm({
     title: props.question.title,
-    tags: props.question.tags.map((tag: { name: string }) => tag.name).join(' '),
+    tags: props.question.tags as string[],
     body: props.question.body,
 });
 
+const tagError = computed(() => {
+    if (questionForm.errors.tags) {
+        return questionForm.errors.tags;
+    }
+
+    const tagKey = Object.keys(questionForm.errors).find((key) => key.startsWith('tags.'));
+    return tagKey ? questionForm.errors[tagKey] : null;
+});
+
+const isDirty = ref();
+watchEffect(() => {
+    isDirty.value = questionForm.isDirty;
+});
+
 const discardEditQuestion = async () => {
-    if (questionForm.title !== props.question.title || questionForm.body !== props.question.body) {
-        if (!(await confirmation('Discard', 'Are you sure you want to ignore all changes?'))) {
+    if (isDirty.value) {
+        if (!(await confirmation('Discard', 'Ignore all changes?'))) {
             return;
         }
     }
 
-    router.get(route('questions.show', props.question.id));
+    questionForm.reset();
 };
 
 const { confirmation } = useConfirm();
@@ -40,7 +60,7 @@ const updateQuestion = async () => {
     questionForm.put(route('questions.update', props.question.id), {
         onSuccess: () => {
             toast('Your question successfully edited.', {
-                description: formattedDate,
+                description: formatFull(),
             });
         },
     });
@@ -50,7 +70,7 @@ const updateQuestion = async () => {
     <Head title="Edit Question" />
 
     <AppLayout>
-        <Container>
+        <Container class="lg:max-w-[1000px]">
             <Heading title="Edit question" />
 
             <form @submit.prevent="updateQuestion">
@@ -63,11 +83,8 @@ const updateQuestion = async () => {
 
                     <div class="mb-4">
                         <Label for="tags" class="mb-1">Tags</Label>
-                        <Input id="tags" type="text" autofocus v-model="questionForm.tags" placeholder="e.g. (php laravel linux)" />
-                        <InputError :message="questionForm.errors.tags" class="mt-1" />
-                        <div v-for="(message, key) in questionForm.errors" :key="key">
-                            <InputError v-if="key.startsWith('tags.')" :message="message" class="mt-1" />
-                        </div>
+                        <TagSelector :available-tags="tags" v-model="questionForm.tags" />
+                        <InputError :message="tagError" class="mt-1" />
                     </div>
 
                     <div class="mb-4">
@@ -80,7 +97,7 @@ const updateQuestion = async () => {
                         <LoaderCircle v-if="questionForm.processing" class="h-4 w-4 animate-spin" />
                         Update Question
                     </Button>
-                    <Button type="button" @click="discardEditQuestion" variant="outline" class="ml-2" :disabled="questionForm.processing">
+                    <Button type="button" @click="discardEditQuestion" variant="outline" class="ml-2" :disabled="questionForm.processing || !isDirty">
                         Discard
                     </Button>
                 </div>
