@@ -15,9 +15,10 @@ return new class extends Migration {
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');
+            $table->boolean('is_admin')->default(false);
 
-            $table->string('avatar')->nullable();
             $table->string('name')->nullable();
+            $table->string('avatar')->nullable();
             $table->text('bio')->nullable();
             $table->string('job_title')->nullable();
             $table->string('location')->nullable();

@@ -5,19 +5,39 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, MessageCircleQuestion } from 'lucide-vue-next';
+import { BookOpen, Folder, LayoutGrid, MailQuestion, MessageSquareMore, MessagesSquare, Tags, UsersRound } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: '/admin',
         icon: LayoutGrid,
     },
     {
+        title: 'Users',
+        href: '/admin/users',
+        icon: UsersRound,
+    },
+    {
+        title: 'Tags',
+        href: '/admin/tags',
+        icon: Tags,
+    },
+    {
         title: 'Questions',
-        href: '/questions',
-        icon: MessageCircleQuestion,
+        href: '/admin/questions',
+        icon: MailQuestion,
+    },
+    {
+        title: 'Answers',
+        href: '/admin/answers',
+        icon: MessageSquareMore,
+    },
+    {
+        title: 'Comments',
+        href: '/admin/comments',
+        icon: MessagesSquare,
     },
 ];
 

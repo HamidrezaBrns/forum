@@ -52,7 +52,8 @@ class DatabaseSeeder extends Seeder
             ->create([
                 'username' => 'HamidrezaBRNS',
                 'email' => 'test@example.com',
-                'name' => 'Hamidreza Barnousi'
+                'name' => 'Hamidreza Barnousi',
+                'is_admin' => true,
             ]);
     }
 }
