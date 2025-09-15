@@ -73,7 +73,7 @@ class QuestionController extends Controller
         views($question)->cooldown(now()->addDay())->record();
 
         return inertia('Questions/Show', [
-            'question' => fn() => QuestionResource::make($question->load(['user', 'tags']))->withAttribute('permissions')->withAttribute('user-vote'),
+            'question' => fn() => QuestionResource::make($question->load(['user', 'tags']))->includeAttributes(['stats', 'permissions', 'user-vote',]),
             'answers' => fn() => AnswerResource::collection($question->answers()->with(['user'])->orderBy('votes_count', 'desc')->latest()->latest('id')->paginate(10)),
         ]);
     }

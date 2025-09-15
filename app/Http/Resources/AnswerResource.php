@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Number;
 
 class AnswerResource extends JsonResource
 {
@@ -31,12 +30,14 @@ class AnswerResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
 
-            'can' => [
-                'update' => $request->user()?->can('update', $this->resource),
-                'delete' => $request->user()?->can('delete', $this->resource),
-                'vote' => $request->user()?->can('create', [Vote::class, $this->resource]),
-                'accept' => $request->user()?->can('accept', $this->resource),
-            ],
+            $this->mergeWhen($request->routeIs('questions.show'), fn() => [
+                'can' => [
+                    'update' => $request->user()?->can('update', $this->resource),
+                    'delete' => $request->user()?->can('delete', $this->resource),
+                    'vote' => $request->user()?->can('create', [Vote::class, $this->resource]),
+                    'accept' => $request->user()?->can('accept', $this->resource),
+                ],
+            ])
         ];
     }
 }

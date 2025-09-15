@@ -7,15 +7,17 @@ trait HasOptionalAttributes
     protected array $optionalAttributes = [];
 
     // Use in Controllers
-    public function withAttribute(string $attribute): static
+    public function includeAttributes(array $attributes): static
     {
-        $this->optionalAttributes[$attribute] = true;
+        foreach ($attributes as $attribute) {
+            $this->optionalAttributes[$attribute] = true;
+        }
 
         return $this;
     }
 
     // Use in Resources
-    public function hasAttribute(string $attribute): bool
+    public function shouldInclude(string $attribute): bool
     {
         return $this->optionalAttributes[$attribute] ?? false;
     }

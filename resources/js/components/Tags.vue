@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Badge } from '@/components/ui/badge';
 import { Link } from '@inertiajs/vue3';
 
 defineProps({
@@ -7,13 +8,10 @@ defineProps({
 </script>
 
 <template>
-    <ul class="flex flex-wrap gap-1.5 text-xs">
+    <ul class="flex flex-wrap gap-1">
         <li v-for="(tag, index) in tags" :key="index">
-            <Link
-                :href="route('questions.tagged', tag)"
-                class="inline-block rounded bg-gray-200 dark:bg-gray-800 dark:text-gray-400 px-1.5 py-0.5 font-semibold text-gray-600 hover:opacity-60 hover:text-black"
-            >
-                {{ tag }}
+            <Link :href="route('questions.tagged', tag)">
+                <Badge variant="secondary" class="font-bold text-gray-600 dark:text-gray-400 hover:opacity-80">{{ tag }}</Badge>
             </Link>
         </li>
     </ul>

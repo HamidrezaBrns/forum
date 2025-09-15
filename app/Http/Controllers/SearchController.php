@@ -36,7 +36,7 @@ class SearchController extends Controller
             ->withQueryString();
 
         return inertia('SearchResults', [
-            'questions' => QuestionResource::collection($questions),
+            'questions' => fn() => QuestionResource::collection($questions),
             'query' => $search_q,
         ]);
 

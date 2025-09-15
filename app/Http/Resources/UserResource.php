@@ -19,14 +19,16 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'email' => $this->when($this->id === $request->user()?->id, $this->email),
 
-            'name' => $this->name,
             'avatar' => $this->avatar,
-            'bio' => $this->bio,
-            'job_title' => $this->job_title,
-            'location' => $this->location,
-            'website' => $this->website,
-            'github' => $this->github,
-            'twitter' => $this->twitter,
+            'name' => $this->name,
+            $this->mergeWhen($this->id === $request->user()?->id || $request->routeIs('profile.activities'), fn() => [
+                'bio' => $this->bio,
+                'job_title' => $this->job_title,
+                'location' => $this->location,
+                'website' => $this->website,
+                'github' => $this->github,
+                'twitter' => $this->twitter,
+            ]),
 
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

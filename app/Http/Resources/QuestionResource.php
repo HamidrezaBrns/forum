@@ -7,7 +7,6 @@ use App\Models\Answer;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Number;
 
 class QuestionResource extends JsonResource
 {
@@ -30,27 +29,30 @@ class QuestionResource extends JsonResource
             'tags' => $this->whenLoaded('tags', fn() => $this->tags->pluck('name')),
             'accepted_answer_id' => $this->accepted_answer_id,
 
-            'answers_count' => $this->answers_count, // by query with count
-            'comments_count' => $this->comments_count, // by query with count
-            'votes_count' => $this->votes_count, // table field
-            'views_count' => views($this->resource)->count(),
+            $this->mergeWhen($this->shouldInclude('stats') || $request->routeIs('questions.index', 'questions.tagged', 'search'), fn() => [
+                'answers_count' => $this->answers_count, // by query with count
+                'comments_count' => $this->comments_count, // by query with count
+                'votes_count' => $this->votes_count, // table field
+                'views_count' => views($this->resource)->count(),
+            ]),
 
-            'vote' => $this->when(
-                $this->hasAttribute('user-vote') && $request->user(),
-                fn() => VoteResource::make($this->votes()->whereBelongsTo($request->user())->first())
-            ), //
+            $this->mergeWhen($this->shouldInclude('user-vote') && $request->user(), fn() => [
+                'vote' => VoteResource::make($this->votes()->whereBelongsTo($request->user())->first())
+            ]), //
 
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
 
-            'can' => $this->when($this->hasAttribute('permissions'),
-                fn() => [
+            $this->mergeWhen($this->shouldInclude('permissions'), fn() => [
+                'can' => [
                     'update' => $request->user()?->can('update', $this->resource),
                     'delete' => $request->user()?->can('delete', $this->resource),
                     'vote' => $request->user()?->can('create', [Vote::class, $this->resource]),
+                    'close' => $request->user()?->can('close', $this->resource),
+
                     'create_answer' => $request->user()?->can('create', [Answer::class, $this->resource]),
                 ]
-            ),
+            ]),
         ];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -36,9 +35,7 @@ class CommentResource extends JsonResource
             'updated_at' => $this->updated_at,
 
             'can' => [
-//                'update' => $request->user()?->can('update', $this->resource),
                 'delete' => $request->user()?->can('delete', $this->resource),
-//                'vote' => $request->user()?->can('create', [Vote::class, $this->resource]),
             ],
         ];
     }

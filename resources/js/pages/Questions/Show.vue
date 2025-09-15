@@ -4,7 +4,6 @@ import DetailedPagination from '@/components/DetailedPagination.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import PostField from '@/components/PostField.vue';
-import SimplePagination from '@/components/SimplePagination.vue';
 import TiptapEditor from '@/components/TiptapEditor.vue';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container.vue';
@@ -117,7 +116,7 @@ const deleteQuestion = async (questionId: number) => {
     router.delete(route('questions.destroy', questionId), {
         preserveScroll: true,
         onSuccess: () => {
-            toast('Question has been deleted.');
+            toast.info('Question has been deleted.');
         },
     });
 };
