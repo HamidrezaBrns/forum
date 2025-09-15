@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import ActivityItem from '@/components/ActivityItem.vue';
+import Container from '@/components/Container.vue';
+import DetailedPagination from '@/components/DetailedPagination.vue';
 import ProfileInfoCard from '@/components/ProfileInfoCard.vue';
-import SimplePagination from '@/components/SimplePagination.vue';
-import Container from '@/components/ui/Container.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import 'remixicon/fonts/remixicon.css';
@@ -28,7 +28,7 @@ const props = defineProps(['user', 'activities']);
                         </div>
 
                         <!-- Pagination -->
-                        <SimplePagination :meta="activities.meta" class="mt-10" />
+                        <DetailedPagination :meta="activities.meta" class="mt-10" />
                     </div>
                 </div>
             </div>
