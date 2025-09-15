@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\User;
+use App\QuestionStatus;
 
 class AnswerPolicy
 {
@@ -13,6 +14,11 @@ class AnswerPolicy
      */
     public function create(User $user, Question $question): bool
     {
+        if ($question->isClosed()) {
+            return false;
+        }
+
+        // User can only answer once per question.
         return $question->answers()->whereBelongsTo($user)->doesntExist();
     }
 
@@ -21,7 +27,11 @@ class AnswerPolicy
      */
     public function update(User $user, Answer $answer): bool
     {
-        return $user->id === $answer->user_id;
+        if ($user->id !== $answer->user_id) {
+            return false;
+        }
+
+        return $answer->question()->select('status')->value('status') === QuestionStatus::OPEN;
     }
 
     /**
@@ -33,7 +43,23 @@ class AnswerPolicy
             return false;
         }
 
-        return $answer->created_at->isAfter(now()->subHour());
+        return $answer->question()->select('status')->value('status') === QuestionStatus::OPEN;
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user, Answer $answer): bool
+    {
+        return $user->is_admin;
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user, Answer $answer): bool
+    {
+        return $user->is_admin;
     }
 
     public function accept(User $user, Answer $answer): bool

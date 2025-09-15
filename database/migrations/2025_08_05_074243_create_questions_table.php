@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\QuestionStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,10 +14,23 @@ return new class extends Migration {
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained()->restrictOnDelete();
+            $table->foreignIdFor(User::class)
+                ->constrained()
+                ->restrictOnDelete();
+
+
             $table->string('title');
             $table->longText('body');
-            $table->integer('votes_count')->default(0);
+
+            $table->integer('votes_count')
+                ->default(0);
+
+            $table->enum('status', array_column(QuestionStatus::cases(), 'value'))
+                ->default(QuestionStatus::OPEN)
+                ->index();
+
+            $table->timestamp('closed_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

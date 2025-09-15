@@ -152,4 +152,11 @@ class QuestionController extends Controller
 
         return back();
     }
+
+    public function close(Question $question)
+    {
+        $question->close();
+
+        return back();
+    }
 }

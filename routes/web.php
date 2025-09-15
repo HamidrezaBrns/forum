@@ -22,6 +22,7 @@ Route::get('/search', SearchController::class)->name('search');
 Route::middleware('auth')->group(function () {
     Route::resource('questions', QuestionController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
     Route::post('/questions/{question}/answers/{answer}/accept', [QuestionController::class, 'acceptAnswer'])->name('questions.answers.accept');
+    Route::patch('/questions/{question}/close', [QuestionController::class, 'close'])->name('questions.close');
 
     Route::resource('questions.answers', AnswerController::class)->shallow()->only(['store', 'update', 'destroy']);
 
@@ -47,3 +48,4 @@ Route::get('/@{user:username}', ProfileController::class)->name('profile.activit
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';

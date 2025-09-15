@@ -37,6 +37,9 @@ class QuestionPolicy
      */
     public function update(User $user, Question $question): bool
     {
+        if ($question->isClosed()) {
+            return false;
+        }
         return $user->id === $question->user_id;
     }
 
@@ -61,9 +64,9 @@ class QuestionPolicy
 //        }
 
         // Not allowed for closed question
-//         if ($question->is_closed) {
-//             return false;
-//         }
+        if ($question->isClosed()) {
+            return false;
+        }
 
         // Just owner of the question can accept an answer.
         return $user->id === $question->user_id;
