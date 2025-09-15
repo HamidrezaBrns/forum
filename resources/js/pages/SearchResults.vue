@@ -2,10 +2,11 @@
 import SimplePagination from '@/components/SimplePagination.vue';
 import Tags from '@/components/Tags.vue';
 import { Button } from '@/components/ui/button';
-import Container from '@/components/ui/Container.vue';
+import Container from '@/components/Container.vue';
 import UserInfoSimpleCard from '@/components/UserInfoSimpleCard.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import DetailedPagination from '@/components/DetailedPagination.vue';
 
 defineProps(['questions', 'tag']);
 </script>
@@ -62,7 +63,7 @@ defineProps(['questions', 'tag']);
                 </li>
             </ul>
 
-            <SimplePagination :meta="questions.meta" details :only="['questions']" />
+            <DetailedPagination :meta="questions.meta" details :only="['questions']" />
         </Container>
     </AppLayout>
 </template>

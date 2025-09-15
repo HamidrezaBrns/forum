@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Container from '@/components/Container.vue';
+import DetailedPagination from '@/components/DetailedPagination.vue';
 import QuestionStats from '@/components/QuestionStats.vue';
 import ShowUserAvatar from '@/components/ShowUserAvatar.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
@@ -45,11 +47,7 @@ defineProps({
             </div>
 
             <ul class="divide-y">
-                <li
-                    v-for="question in questions.data"
-                    :key="question.id"
-                    class="p-4 transition-colors hover:bg-gray-50 sm:px-6 dark:hover:bg-gray-950"
-                >
+                <li v-for="question in questions.data" :key="question.id" class="p-4 sm:px-6">
                     <div class="flex items-start gap-3">
                         <component
                             :is="question.user ? Link : 'div'"
@@ -85,7 +83,7 @@ defineProps({
                 </li>
             </ul>
 
-            <SimplePagination :meta="questions.meta" details :only="['questions']" />
+            <DetailedPagination :meta="questions.meta" details :only="['questions']" />
         </Container>
     </AppLayout>
 </template>

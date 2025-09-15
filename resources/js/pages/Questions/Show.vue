@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Container from '@/components/Container.vue';
+import DetailedPagination from '@/components/DetailedPagination.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import PostField from '@/components/PostField.vue';
@@ -147,7 +149,7 @@ const deleteQuestion = async (questionId: number) => {
                         </div>
                     </div>
 
-                    <SimplePagination :meta="answers.meta" :only="['answers']" />
+                    <DetailedPagination :meta="answers.meta" :only="['answers']" />
                 </div>
 
                 <div v-if="$page.props.auth.user">
