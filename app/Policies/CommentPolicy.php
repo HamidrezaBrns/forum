@@ -48,26 +48,6 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment): bool
     {
-        if ($user->id !== $comment->user_id) {
-            return false;
-        }
-
-        return $comment->created_at->isAfter(now()->subHour());
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Comment $comment): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Comment $comment): bool
-    {
-        return false;
+        return $user->id === $comment->user_id;
     }
 }
