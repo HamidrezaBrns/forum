@@ -64,6 +64,9 @@ export interface Question extends BasePost {
     tags: string[];
     answers_count: number;
     accepted_answer_id: number;
+    status: 'open' | 'closed' | 'draft';
+    closed_at: string | null;
+    can: BasePost['can'] & { close: boolean };
 }
 
 export interface Answer extends BasePost {
