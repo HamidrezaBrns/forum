@@ -76,7 +76,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 <template>
     <Head title="Admin - Edit question" />
 
-    <AdminLayout>
+    <AdminLayout :breadcrumbs="breadcrumbs">
         <ContainerAdmin>
             <Heading :title="$t('Edit Question')" />
 
