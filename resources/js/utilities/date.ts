@@ -1,19 +1,35 @@
 // utils/date.ts
 import { formatDistance, parseISO } from 'date-fns';
+import { enUS, faIR } from 'date-fns/locale';
+import { toPersianDigits } from './number';
+
+function getLocale(locale: string) {
+    return locale.startsWith('fa') ? faIR : enUS;
+}
 
 /**
- * Relative date like "3 days ago"
+ * Relative date like "3 days ago" / "۳ روز پیش"
  */
-export const formatRelative = (date: string | Date): string => {
+export const formatRelative = (date: string | Date, locale: string = document.documentElement.lang): string => {
     const parsed = typeof date === 'string' ? parseISO(date) : date;
-    return formatDistance(parsed, new Date(), { addSuffix: true });
+
+    let result = formatDistance(parsed, new Date(), {
+        addSuffix: true,
+        locale: getLocale(locale),
+    });
+
+    if (locale.startsWith('fa')) {
+        result = toPersianDigits(result);
+    }
+
+    return result;
 };
 
 /**
  * Absolute date in human-friendly format
  * e.g. "Monday, September 8, 2025 at 10:15 AM"
  */
-export const formatFull = (date: string | Date = new Date(), locale: string = 'en-CA'): string => {
+export const formatFull = (date: string | Date = new Date(), locale: string = document.documentElement.lang): string => {
     const parsed = typeof date === 'string' ? new Date(date) : date;
     return new Intl.DateTimeFormat(locale, {
         weekday: 'long',
@@ -38,9 +54,8 @@ export const formatDate = (
         minute: '2-digit',
         hour12: false,
     },
-    locale: string = 'en-CA',
+    locale: string = document.documentElement.lang,
 ): string => {
     const parsed = typeof date === 'string' ? new Date(date) : date;
-
     return parsed ? new Intl.DateTimeFormat(locale, options).format(parsed) : 'null';
 };
