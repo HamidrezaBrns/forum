@@ -26,6 +26,7 @@ class QuestionFactory extends Factory
             'title' => str(fake()->sentence)->beforeLast('.')->title(),
             'body' => Collection::times(4, fn() => fake()->realText(1250))->join(PHP_EOL . PHP_EOL),
             'votes_count' => 0,
+            'created_at' => fake()->dateTimeBetween('-7 days', 'now'),
         ];
     }
 

@@ -24,6 +24,7 @@ class AnswerFactory extends Factory
             'question_id' => Question::factory(),
             'body' => fake()->realText(600),
             'votes_count' => 0,
+            'created_at' => fake()->dateTimeBetween('-7 days', 'now'),
         ];
     }
 }

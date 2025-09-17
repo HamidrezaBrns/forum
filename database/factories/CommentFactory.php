@@ -24,6 +24,7 @@ class CommentFactory extends Factory
             'commentable_type' => $this->commentableType(...),
             'commentable_id' => Question::factory(),
             'body' => fake()->realText(),
+            'created_at' => fake()->dateTimeBetween('-7 days', 'now'),
         ];
     }
 
