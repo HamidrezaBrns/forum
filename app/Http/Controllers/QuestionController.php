@@ -50,7 +50,7 @@ class QuestionController extends Controller
             'tags' => ['nullable', 'array', 'max:5'],
             'tags.*' => ['string', 'exists:tags,name'],
         ], [
-            'tags.*.exists' => 'Some of the selected tags are invalid.',
+            'tags.*.exists' => __('validation.custom.tags-exists'),
         ]);
 
         $question = Question::create([
@@ -109,7 +109,7 @@ class QuestionController extends Controller
             'tags' => ['nullable', 'array', 'max:5'],
             'tags.*' => ['string', 'exists:tags,name'],
         ], [
-            'tags.*.exists' => 'The selected tags does not exist.',
+            'tags.*.exists' => __('validation.custom.tags-exists'),
         ]);
 
         $question->update(Arr::except($validated, 'tags'));

@@ -72,22 +72,26 @@ const breadcrumbs: BreadcrumbItem[] = [
 
     <AdminLayout :breadcrumbs="breadcrumbs">
         <ContainerAdmin>
-            <h2 class="mb-4 text-lg font-medium">Questions</h2>
+            <h2 class="mb-2 text-lg font-medium">{{ $t('Questions') }}</h2>
 
             <div class="mb-2 flex flex-wrap items-center gap-4">
-                <SearchRealtime :route="route('admin.questions.index')" placeholder="Search questions..." :only="['questions']" />
+                <SearchRealtime
+                    :route="route('admin.questions.index')"
+                    :placeholder="$t('Search questions by title, body, user or tags...')"
+                    :only="['questions']"
+                />
 
                 <FilterSelect
                     :route="route('admin.questions.index')"
                     key-name="filter"
-                    label="Filter"
+                    :label="$t('Filter')"
                     :options="[
                         { value: 'open', label: 'Open' },
                         { value: 'closed', label: 'Closed' },
                         { value: 'draft', label: 'Draft' },
                     ]"
                     :only="['questions']"
-                    placeholder="Select status"
+                    placeholder="Status"
                 />
             </div>
 
@@ -155,7 +159,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
                         <TableCell class="break-words">
                             <Link :href="route('admin.users.show', q.user_id)" class="text-blue-600 hover:underline">
-                                {{ q.user.username }}
+                                {{ q.user?.username ?? $t('[Deleted User]') }}
                             </Link>
                         </TableCell>
 
@@ -174,21 +178,27 @@ const breadcrumbs: BreadcrumbItem[] = [
                                         <Ellipsis />
                                     </ShadcnButton>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuContent class="in-rtl:text-right">
+                                    <DropdownMenuLabel>{{ $t('Actions') }}</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
 
-                                    <DropdownMenuItem as-child v-if="!q.deleted_at">
-                                        <Link :href="route('questions.show', q.id)" as="button" class="block w-full">
-                                            <FileSymlink class="mr-1 size-4" />
-                                            Go to the page
+                                    <DropdownMenuItem as-child>
+                                        <Link
+                                            :href="route('questions.show', q.id)"
+                                            as="button"
+                                            class="block w-full flex-row-reverse disabled:opacity-50"
+                                            :disabled="q.deleted_at"
+                                            :title="q.deleted_at ? $t('Question has been deleted') : ''"
+                                        >
+                                            <FileSymlink class="me-1 size-4" />
+                                            {{ $t('Go to the page') }}
                                         </Link>
                                     </DropdownMenuItem>
 
                                     <DropdownMenuItem as-child>
-                                        <Link :href="route('admin.questions.edit', q.id)" as="button" class="block w-full">
-                                            <PencilLine class="mr-1 size-4" />
-                                            Edit
+                                        <Link :href="route('admin.questions.edit', q.id)" as="button" class="block w-full flex-row-reverse">
+                                            <PencilLine class="me-1 size-4" />
+                                            {{ $t('Edit') }}
                                         </Link>
                                     </DropdownMenuItem>
 
@@ -198,10 +208,12 @@ const breadcrumbs: BreadcrumbItem[] = [
                                             :href="route('admin.questions.close', q.id)"
                                             :on-success="() => toast.success(`Question ${q.id} closed`)"
                                             as="button"
-                                            class="block w-full"
+                                            class="block w-full flex-row-reverse disabled:opacity-50"
+                                            :disabled="q.deleted_at"
+                                            :title="q.deleted_at ? $t('Question has been deleted') : ''"
                                         >
-                                            <Pause class="mr-1 size-4" />
-                                            Close
+                                            <Pause class="me-1 size-4" />
+                                            {{ $t('Close') }}
                                         </Link>
                                     </DropdownMenuItem>
 
@@ -211,31 +223,33 @@ const breadcrumbs: BreadcrumbItem[] = [
                                             :href="route('admin.questions.reopen', q.id)"
                                             :on-success="() => toast.success(`Question ${q.id} reopened`)"
                                             as="button"
-                                            class="block w-full"
+                                            class="block w-full flex-row-reverse disabled:opacity-50"
+                                            :disabled="q.deleted_at"
+                                            :title="q.deleted_at ? $t('Question has been deleted') : ''"
                                         >
-                                            <Play class="mr-1 size-4" />
-                                            Reopen
+                                            <Play class="me-1 size-4" />
+                                            {{ $t('Reopen') }}
                                         </Link>
                                     </DropdownMenuItem>
 
                                     <DropdownMenuItem as-child v-if="q.deleted_at">
-                                        <button type="button" class="w-full" @click="actionHandler.restore(q.id)">
-                                            <RotateCcw class="mr-1 size-4" />
-                                            Restore
+                                        <button type="button" class="w-full flex-row-reverse" @click="actionHandler.restore(q.id)">
+                                            <RotateCcw class="me-1 size-4" />
+                                            {{ $t('Restore') }}
                                         </button>
                                     </DropdownMenuItem>
 
                                     <DropdownMenuItem as-child v-else>
-                                        <button type="button" class="w-full" @click="actionHandler.softDelete(q.id)">
-                                            <Eraser class="mr-1 size-4" />
-                                            Soft delete
+                                        <button type="button" class="w-full flex-row-reverse" @click="actionHandler.softDelete(q.id)">
+                                            <Eraser class="me-1 size-4" />
+                                            {{ $t('Soft delete') }}
                                         </button>
                                     </DropdownMenuItem>
 
                                     <DropdownMenuItem as-child>
-                                        <button type="button" class="w-full" @click="actionHandler.forceDelete(q.id)">
-                                            <Trash2 class="mr-1 size-4" />
-                                            Force delete
+                                        <button type="button" class="w-full flex-row-reverse" @click="actionHandler.forceDelete(q.id)">
+                                            <Trash2 class="me-1 size-4" />
+                                            {{ $t('Force delete') }}
                                         </button>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>

@@ -25,7 +25,7 @@ const props = defineProps<{
         </div>
 
         <div class="overflow-x-auto">
-            <Table class="w-full text-left text-sm">
+            <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead v-for="col in columns" :key="col">

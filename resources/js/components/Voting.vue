@@ -2,6 +2,7 @@
 import { VisitOptions } from '@inertiajs/core';
 import { router, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import { formatNumber } from '@/utilities/number';
 
 const props = defineProps(['post']);
 
@@ -33,19 +34,19 @@ const isDisabled = computed(() => processing.value || cannotVote);
             :disabled="isDisabled"
             class="cursor-pointer rounded-full border px-2 py-1 not-disabled:hover:opacity-70 disabled:cursor-default"
             :class="{ 'bg-teal-100 dark:bg-teal-900': post.vote?.is_upvote == true, 'bg-gray-100 text-gray-400': cannotVote }"
-            :title="cannotVote ? 'You can\'t vote your own post' : 'Upvote'"
+            :title="cannotVote ? $t('You can\'t vote your own post.') : $t('Upvote')"
         >
             <i class="ri-arrow-up-s-fill"></i>
         </button>
 
-        <div class="p-2">{{ post.votes_count }}</div>
+        <div class="p-2">{{ formatNumber(post.votes_count) }}</div>
 
         <button
             @click="toggleVote(false)"
             :disabled="isDisabled"
             class="cursor-pointer rounded-full border px-2 py-1 not-disabled:hover:opacity-70 disabled:cursor-default"
             :class="{ 'bg-teal-100 dark:bg-teal-900': post.vote?.is_upvote == false, 'bg-gray-100 text-gray-400': cannotVote }"
-            :title="cannotVote ? 'You can\'t vote your own post' : 'Downvote'"
+            :title="cannotVote ? $t('You can\'t vote your own post.') : $t('Downvote')"
         >
             <i class="ri-arrow-down-s-fill"></i>
         </button>

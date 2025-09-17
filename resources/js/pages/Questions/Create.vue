@@ -8,7 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { formatFull } from '@/utilities/date';
 import { Head, useForm } from '@inertiajs/vue3';
+import { trans } from 'laravel-vue-i18n';
 import { LoaderCircle } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { toast } from 'vue-sonner';
@@ -34,39 +36,48 @@ const tagError = computed(() => {
 
 const createQuestion = () =>
     questionForm.post(route('questions.store'), {
-        onSuccess: () => toast.success('Your question created successfully.'),
+        onSuccess: () =>
+            toast.success(trans('Your question created successfully.'), {
+                description: formatFull(),
+            }),
     });
 </script>
 
 <template>
-    <Head title="Ask Question" />
+    <Head :title="$t('Create Question')" />
 
     <AppLayout>
         <Container class="lg:max-w-[1000px]">
-            <Heading title="Ask a question" />
+            <Heading :title="$t('Create Question')" />
 
             <form @submit.prevent="createQuestion">
                 <div class="mb-4">
-                    <Label for="title" class="mb-1">Title</Label>
-                    <Input id="title" type="text" autofocus v-model="questionForm.title" placeholder="Write a clear, concise question..." />
+                    <Label for="title" class="mb-1">{{ $t('Title') }}</Label>
+                    <Input
+                        id="title"
+                        type="text"
+                        autofocus
+                        v-model="questionForm.title"
+                        :placeholder="$t('Write a clear, concise title for question...')"
+                    />
                     <InputError :message="questionForm.errors.title" class="mt-1" />
                 </div>
 
                 <div class="mb-4">
-                    <Label for="tags" class="mb-1">Tags</Label>
-                    <TagSelector :available-tags="tags" v-model="questionForm.tags" />
+                    <Label for="tags" class="mb-1">{{ $t('Tag') }}</Label>
+                    <TagSelector :available-tags="tags" v-model="questionForm.tags" :placeholder="$t('Up to 5 tags - e.g. php, laravel...')" />
                     <InputError :message="tagError" class="mt-1" />
                 </div>
 
                 <div class="mb-4">
-                    <Label for="body" class="mb-1">Body</Label>
+                    <Label for="body" class="mb-1">{{ $t('Body') }}</Label>
                     <TiptapEditor v-model="questionForm.body" />
                     <InputError :message="questionForm.errors.body" class="mt-1" />
                 </div>
 
                 <Button type="submit" :disabled="questionForm.processing">
                     <LoaderCircle v-if="questionForm.processing" class="h-4 w-4 animate-spin" />
-                    Post your question
+                    {{ $t('Post') }}
                 </Button>
             </form>
         </Container>

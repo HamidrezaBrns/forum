@@ -34,24 +34,24 @@ const breadcrumbs: BreadcrumbItem[] = [
 
     <AdminLayout :breadcrumbs="breadcrumbs">
         <ContainerAdmin>
-            <Heading title="Create Tag" />
+            <Heading :title="$t('Create Tag')" />
 
             <form @submit.prevent="createTag">
                 <div class="mb-4">
-                    <Label for="name" class="mb-1">Name</Label>
+                    <Label for="name" class="mb-1">{{ $t('Name') }}</Label>
                     <Input id="name" type="text" autofocus v-model="tagForm.name" />
                     <InputError :message="tagForm.errors.name" class="mt-1" />
                 </div>
 
                 <div class="mb-4">
-                    <Label for="description" class="mb-1">Description</Label>
+                    <Label for="description" class="mb-1">{{ $t('Description') }}</Label>
                     <Textarea id="description" v-model="tagForm.description" />
                     <InputError :message="tagForm.errors.description" class="mt-1" />
                 </div>
 
                 <Button type="submit" :disabled="tagForm.processing">
                     <LoaderCircle v-if="tagForm.processing" class="h-4 w-4 animate-spin" />
-                    Create
+                    {{ $t('Create') }}
                 </Button>
             </form>
         </ContainerAdmin>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Answer } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
+import { trans } from 'laravel-vue-i18n';
 import { computed } from 'vue';
 import { toast } from 'vue-sonner';
 
@@ -19,15 +20,15 @@ const acceptAnswer = () =>
             preserveScroll: true,
             onSuccess: () => {
                 if (page.props.question.accepted_answer_id) {
-                    toast.success('This answer accepted as correct.');
+                    toast.success(trans('This answer accepted as correct.'));
                 } else {
-                    toast.info('Correct answer selection canceled.');
+                    toast.info(trans('Correct answer selection canceled.'));
                 }
             },
         },
     );
 
-const canAccept = computed(() => page.props.auth && page.props.question.user.id === page.props.auth.user?.id);
+const canAccept = computed(() => page.props.auth && page.props.question.user?.id === page.props.auth.user?.id);
 const isAccepted = computed(() => page.props.question.accepted_answer_id === props.answer.id);
 </script>
 
@@ -38,14 +39,14 @@ const isAccepted = computed(() => page.props.question.accepted_answer_id === pro
                 @click="acceptAnswer"
                 class="cursor-pointer rounded-full border px-2 py-1 not-disabled:hover:opacity-70 disabled:cursor-default disabled:bg-gray-100 disabled:text-gray-400"
                 :class="{ 'bg-green-300': isAccepted }"
-                :title="!answer.can?.accept ? 'You can\'t select your own answer as accepted.' : 'Accept this answer as correct.'"
+                :title="!answer.can?.accept ? $t('You can\'t select your own answer as accepted.') : $t('Accept')"
                 :disabled="!answer.can?.accept"
             >
                 <i class="ri-check-line"></i>
             </button>
         </div>
 
-        <div v-else-if="isAccepted" title="The question owner accepted this as the best answer." class="text-4xl font-semibold text-green-700">
+        <div v-else-if="isAccepted" :title="$t('Accepted as the best answer.')" class="text-4xl font-semibold text-green-700">
             <i class="ri-check-line"></i>
         </div>
     </div>

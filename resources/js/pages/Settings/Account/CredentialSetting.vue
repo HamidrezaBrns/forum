@@ -74,18 +74,18 @@ const updatePassword = () => {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbItems">
-        <Head title="Account Settings" />
+        <Head :title="$t('Account Credentials')" />
 
         <SettingsLayout>
             <div class="flex flex-col space-y-6">
-                <HeadingSmall title="Account Credentials" description="Update your username, email address ans password." />
+                <HeadingSmall :title="$t('Account Credentials')" :description="$t('Update your username, email address ans password.')" />
 
                 <fieldset class="rounded border p-4">
-                    <legend class="text-xs">Change email and username</legend>
+                    <legend class="text-xs">{{ $t('Change email and username') }}</legend>
 
                     <form @submit.prevent="updateIdentity" class="space-y-6">
                         <div class="grid gap-2">
-                            <Label for="username">Username</Label>
+                            <Label for="username">{{ $t('Username') }}</Label>
                             <Input
                                 id="username"
                                 class="mt-1 block w-full"
@@ -98,7 +98,7 @@ const updatePassword = () => {
                         </div>
 
                         <div class="grid gap-2">
-                            <Label for="email">Email address</Label>
+                            <Label for="email">{{ $t('Email address') }}</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -113,24 +113,24 @@ const updatePassword = () => {
 
                         <div v-if="mustVerifyEmail && !user.email_verified_at">
                             <p class="-mt-4 text-sm text-muted-foreground">
-                                Your email address is unverified.
+                                {{ $t('Your email address is unverified.') }}
                                 <Link
                                     :href="route('verification.send')"
                                     method="post"
                                     as="button"
                                     class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                                 >
-                                    Click here to resend the verification email.
+                                    {{ $t('Click here to resend the verification email.') }}
                                 </Link>
                             </p>
 
                             <div v-if="status === 'verification-link-sent'" class="mt-2 text-sm font-medium text-green-600">
-                                A new verification link has been sent to your email address.
+                                {{ $t('A new verification link has been sent to your email address.') }}
                             </div>
                         </div>
 
                         <div class="flex items-center gap-4">
-                            <Button :disabled="identityForm.processing">Save identity</Button>
+                            <Button :disabled="identityForm.processing">{{ $t('Save identity') }}</Button>
 
                             <Transition
                                 enter-active-class="transition ease-in-out"
@@ -138,18 +138,20 @@ const updatePassword = () => {
                                 leave-active-class="transition ease-in-out"
                                 leave-to-class="opacity-0"
                             >
-                                <p v-show="identityForm.recentlySuccessful" class="text-sm text-neutral-600">Saved.</p>
+                                <p v-show="identityForm.recentlySuccessful" class="text-sm text-neutral-600">
+                                    {{ $t('Saved.') }}
+                                </p>
                             </Transition>
                         </div>
                     </form>
                 </fieldset>
 
                 <fieldset class="rounded border p-4">
-                    <legend class="text-xs">Change password</legend>
+                    <legend class="text-xs">{{ $t('Change password') }}</legend>
 
                     <form @submit.prevent="updatePassword" class="space-y-6">
                         <div class="grid gap-2">
-                            <Label for="current_password">Current password</Label>
+                            <Label for="current_password">{{ $t('Current password') }}</Label>
                             <Input
                                 id="current_password"
                                 ref="currentPasswordInput"
@@ -163,7 +165,7 @@ const updatePassword = () => {
                         </div>
 
                         <div class="grid gap-2">
-                            <Label for="password">New password</Label>
+                            <Label for="password">{{ $t('New password') }}</Label>
                             <Input
                                 id="password"
                                 ref="passwordInput"
@@ -177,7 +179,7 @@ const updatePassword = () => {
                         </div>
 
                         <div class="grid gap-2">
-                            <Label for="password_confirmation">Confirm password</Label>
+                            <Label for="password_confirmation">{{ $t('Confirm password') }}</Label>
                             <Input
                                 id="password_confirmation"
                                 v-model="passwordForm.password_confirmation"
@@ -190,7 +192,7 @@ const updatePassword = () => {
                         </div>
 
                         <div class="flex items-center gap-4">
-                            <Button :disabled="passwordForm.processing">Save password</Button>
+                            <Button :disabled="passwordForm.processing">{{ $t('Save password') }}</Button>
 
                             <Transition
                                 enter-active-class="transition ease-in-out"
@@ -198,7 +200,9 @@ const updatePassword = () => {
                                 leave-active-class="transition ease-in-out"
                                 leave-to-class="opacity-0"
                             >
-                                <p v-show="passwordForm.recentlySuccessful" class="text-sm text-neutral-600">Saved.</p>
+                                <p v-show="passwordForm.recentlySuccessful" class="text-sm text-neutral-600">
+                                    {{ $t('Saved.') }}
+                                </p>
                             </Transition>
                         </div>
                     </form>

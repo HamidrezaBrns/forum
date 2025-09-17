@@ -7,6 +7,7 @@ import Tags from '@/components/Tags.vue';
 import { Button } from '@/components/ui/button';
 import UserInfoSimpleCard from '@/components/UserInfoSimpleCard.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { formatNumber } from '@/utilities/number';
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
@@ -20,14 +21,17 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Questions" />
+    <Head :title="$t('Questions')" />
 
     <AppLayout>
         <Container>
             <div class="border-b px-6 pb-4">
                 <template v-if="tag">
                     <h1 class="mb-2 text-3xl font-bold">
-                        [{{ tag.name }}] <span class="text-sm font-medium">{{ questions.meta.total }} Questions</span>
+                        [{{ tag.name }}]
+                        <span class="text-sm font-medium">
+                            {{ $t(':total Questions', { total: formatNumber(questions.meta.total) }) }}
+                        </span>
                     </h1>
 
                     <p class="text-sm">{{ tag.description }}</p>
@@ -35,10 +39,12 @@ defineProps({
 
                 <template v-else>
                     <div class="flex flex-wrap justify-between">
-                        <h1 class="text-3xl font-medium">{{ questions.meta.total }} Questions</h1>
+                        <h1 class="text-3xl font-medium">
+                            {{ $t(':total Questions', { total: formatNumber(questions.meta.total) }) }}
+                        </h1>
 
                         <Link :href="route('questions.create')">
-                            <Button variant="outline" type="button">Ask Question</Button>
+                            <Button variant="outline" type="button">{{ $t('Ask Question') }}</Button>
                         </Link>
                     </div>
                 </template>
@@ -55,7 +61,7 @@ defineProps({
                         </component>
 
                         <div class="flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                            <div class="min-w-0 sm:pr-10">
+                            <div class="min-w-0 sm:pe-10">
                                 <Link :href="route('questions.show', question.id)" class="group" :title="question.title">
                                     <h3
                                         class="mb-1 line-clamp-2 text-base leading-5 font-medium break-words group-hover:underline sm:line-clamp-1 sm:text-lg"

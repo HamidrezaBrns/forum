@@ -26,22 +26,22 @@ defineProps<Props>();
     <DropdownMenuGroup>
         <DropdownMenuItem :as-child="true">
             <Link class="block w-full" :href="route('profile.activities', user.username)" prefetch as="button">
-                <LayoutGrid class="mr-2 h-4 w-4" />
-                Profile
+                <LayoutGrid class="me-2 size-4" />
+                {{ $t('Profile') }}
             </Link>
         </DropdownMenuItem>
         <DropdownMenuItem :as-child="true">
             <Link class="block w-full" :href="route('account.edit')" prefetch as="button">
-                <Settings class="mr-2 h-4 w-4" />
-                Settings
+                <Settings class="me-2 size-4" />
+                {{ $t('Settings') }}
             </Link>
         </DropdownMenuItem>
     </DropdownMenuGroup>
     <DropdownMenuSeparator />
     <DropdownMenuItem :as-child="true">
         <Link class="block w-full" method="post" :href="route('logout')" @click="handleLogout" as="button">
-            <LogOut class="mr-2 h-4 w-4" />
-            Log out
+            <LogOut class="me-2 size-4" />
+            {{ $t('Log out') }}
         </Link>
     </DropdownMenuItem>
 </template>

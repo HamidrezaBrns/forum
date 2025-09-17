@@ -58,7 +58,7 @@ const removeAvatar = () => {
     }
     preview.value = '';
 
-    profileForm.transform((data) => ({ ...data, avatar: null }));
+    profileForm.transform((data) => ({ ...data, removeAvatar: true }));
 
     nextTick(() => {
         if (fileInput.value) {
@@ -75,15 +75,15 @@ const submit = () =>
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbItems">
-        <Head title="Account Profile" />
+        <Head :title="$t('Account Profile')" />
 
         <SettingsLayout>
             <div class="flex flex-col space-y-6">
-                <HeadingSmall title="Profile Settings" description="Enter you profile information." />
+                <HeadingSmall :title="$t('Profile Settings')" :description="$t('Enter you profile information.')" />
 
                 <form @submit.prevent="submit" class="space-y-6">
                     <div class="grid gap-2">
-                        <Label for="avatar">Profile Image</Label>
+                        <Label for="avatar">{{ $t('Image') }}</Label>
 
                         <div class="relative">
                             <Avatar class="size-40 overflow-hidden rounded-lg border-4">
@@ -100,52 +100,54 @@ const submit = () =>
                                 class="absolute bottom-0 mt-1 w-40 cursor-pointer rounded-t-none bg-gray-500"
                             />
                         </div>
-                        <Button @click="removeAvatar" variant="link" type="button" size="icon" class="cursor-pointer text-blue-500"> Remove </Button>
+                        <Button @click="removeAvatar" variant="link" type="button" size="icon" class="cursor-pointer text-blue-500">
+                            {{ $t('Remove') }}
+                        </Button>
                         <InputError class="mt-2" :message="profileForm.errors.avatar" />
                     </div>
 
                     <div class="grid gap-2">
-                        <Label for="name">Full Name</Label>
+                        <Label for="name">{{ $t('Full Name') }}</Label>
                         <Input id="name" class="mt-1 block w-full" v-model="profileForm.name" />
                         <InputError class="mt-2" :message="profileForm.errors.name" />
                     </div>
 
                     <div class="grid gap-2">
-                        <Label for="bio">About Me</Label>
+                        <Label for="bio">{{ $t('About Me') }}</Label>
                         <Textarea id="bio" class="mt-1 block w-full" v-model="profileForm.bio" />
                         <InputError class="mt-2" :message="profileForm.errors.bio" />
                     </div>
 
                     <div class="grid gap-2">
-                        <Label for="jobTitle">Job Title</Label>
+                        <Label for="jobTitle">{{ $t('Job Title') }}</Label>
                         <Input id="jobTitle" class="mt-1 block w-full" v-model="profileForm.job_title" />
                         <InputError class="mt-2" :message="profileForm.errors.job_title" />
                     </div>
 
                     <div class="grid gap-2">
-                        <Label for="location">Location</Label>
+                        <Label for="location">{{ $t('Location') }}</Label>
                         <Input id="location" class="mt-1 block w-full" v-model="profileForm.location" />
                         <InputError class="mt-2" :message="profileForm.errors.location" />
                     </div>
 
                     <fieldset class="rounded border p-4">
-                        <legend class="text-xs">Links</legend>
+                        <legend class="text-xs">{{ $t('Links') }}</legend>
 
                         <div class="flex gap-4">
                             <div>
-                                <Label for="website">Website link</Label>
+                                <Label for="website">{{ $t('Website link') }}</Label>
                                 <Input id="website" class="mt-1 block w-full" v-model="profileForm.website" />
                                 <InputError class="mt-2" :message="profileForm.errors.website" />
                             </div>
 
                             <div>
-                                <Label for="github">GitHub link</Label>
+                                <Label for="github">{{ $t('GitHub link') }}</Label>
                                 <Input id="github" class="mt-1 block w-full" v-model="profileForm.github" />
                                 <InputError class="mt-2" :message="profileForm.errors.github" />
                             </div>
 
                             <div>
-                                <Label for="twitter">Twitter link</Label>
+                                <Label for="twitter">{{ $t('Twitter link') }}</Label>
                                 <Input id="twitter" class="mt-1 block w-full" v-model="profileForm.twitter" />
                                 <InputError class="mt-2" :message="profileForm.errors.twitter" />
                             </div>
@@ -153,7 +155,7 @@ const submit = () =>
                     </fieldset>
 
                     <div class="flex items-center gap-4">
-                        <Button :disabled="profileForm.processing">Save</Button>
+                        <Button :disabled="profileForm.processing">{{ $t('Save') }}</Button>
 
                         <Transition
                             enter-active-class="transition ease-in-out"
@@ -161,7 +163,9 @@ const submit = () =>
                             leave-active-class="transition ease-in-out"
                             leave-to-class="opacity-0"
                         >
-                            <p v-show="profileForm.recentlySuccessful" class="text-sm text-neutral-600">Saved.</p>
+                            <p v-show="profileForm.recentlySuccessful" class="text-sm text-neutral-600">
+                                {{ $t('Saved.') }}
+                            </p>
                         </Transition>
                     </div>
                 </form>

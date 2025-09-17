@@ -10,16 +10,16 @@ const { state, confirm, cancel } = useConfirm();
     <Dialog modal :open="state.show">
         <DialogContent>
             <DialogHeader>
-                <DialogTitle>{{ state.title }}</DialogTitle>
-                <DialogDescription>{{ state.description }}</DialogDescription>
+                <DialogTitle>{{ $t(state.title) }}</DialogTitle>
+                <DialogDescription>{{ $t(state.description) }}</DialogDescription>
             </DialogHeader>
 
             <DialogFooter>
                 <DialogClose as-child>
-                    <Button type="button" @click="cancel" variant="outline">Cancel</Button>
+                    <Button type="button" @click="cancel" variant="outline">{{ $t('Cancel') }}</Button>
                 </DialogClose>
 
-                <Button type="button" @click="confirm">Confirm</Button>
+                <Button type="button" @click="confirm">{{ $t('Confirm') }}</Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>

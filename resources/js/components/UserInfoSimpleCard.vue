@@ -12,7 +12,7 @@ const profileLink = computed(() => (props.post.user ? route('profile.activities'
 </script>
 
 <template>
-    <div class="flex items-center gap-1 text-right text-sm text-gray-500 sm:block lg:space-y-2 dark:text-gray-400">
+    <div class="flex items-center gap-1 rtl:text-left ltr:text-right text-sm text-gray-500 sm:block lg:space-y-2 dark:text-gray-400">
         <div>{{ formatRelative(post.created_at) }}</div>
 
         <component :is="profileLink ? Link : 'div'" v-bind="profileLink ? { href: profileLink, class: 'hover:underline' } : {}" class="font-semibold">

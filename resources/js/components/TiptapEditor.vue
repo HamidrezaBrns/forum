@@ -84,7 +84,7 @@ const promptUserForHref = () => {
 <template>
     <div
         v-if="editor"
-        class="rounded-md border border-input bg-transparent shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30"
+        class="tiptap-direction rounded-md border border-input bg-transparent shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30"
     >
         <menu class="flex divide-x border-b">
             <li>
@@ -259,6 +259,9 @@ const promptUserForHref = () => {
 </template>
 
 <style lang="scss" scoped>
+.tiptap-direction{
+    direction: ltr;
+}
 :deep(.tiptap) {
     :first-child {
         margin-top: 0;

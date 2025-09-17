@@ -27,7 +27,7 @@ const currentPath = page.props.ziggy?.location ? new URL(page.props.ziggy.locati
 
 <template>
     <div class="px-4 py-6">
-        <Heading title="Settings" description="Manage your profile and account settings" />
+        <Heading :title="$t('Settings')" />
 
         <div class="flex flex-col lg:flex-row lg:space-x-12">
             <aside class="w-full max-w-xl lg:w-48">
@@ -40,7 +40,7 @@ const currentPath = page.props.ziggy?.location ? new URL(page.props.ziggy.locati
                         as-child
                     >
                         <Link :href="item.href">
-                            {{ item.title }}
+                            {{ $t(item.title) }}
                         </Link>
                     </Button>
                 </nav>

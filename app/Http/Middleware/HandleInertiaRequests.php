@@ -55,6 +55,8 @@ class HandleInertiaRequests extends Middleware
             ],
             'sidebarOpen' => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
 
+            'locale' => fn() => app()->getLocale(),
+
 //            'permissions' => [
 //                'create_questions' => $request->user()?->can('create', Question::class),
 //            ]

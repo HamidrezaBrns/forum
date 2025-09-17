@@ -19,7 +19,7 @@ class AnswerController extends Controller
 
         $answers = Answer::query()
             ->withTrashed()
-            ->with('user:id,username,email')
+            ->with(['user:id,username,email', 'question:id,deleted_at'])
             ->orderBy($sortParam['sort'], $sortParam['dir'])
             ->orderByDesc('id');
 

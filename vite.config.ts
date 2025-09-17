@@ -1,6 +1,7 @@
+import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
-import tailwindcss from '@tailwindcss/vite';
+import i18n from 'laravel-vue-i18n/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -19,5 +20,6 @@ export default defineConfig({
                 },
             },
         }),
+        i18n(),
     ],
 });

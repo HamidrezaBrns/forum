@@ -9,7 +9,7 @@ const props = defineProps<{
     post: Question | Answer;
 }>();
 
-const actionText = computed(() => (props.post.type === 'question' ? 'asked' : 'answered'));
+const actionText = computed(() => (props.post.type === 'question' ? 'asked,' : 'answered,'));
 const isEdited = computed(() => props.post.created_at !== props.post.updated_at);
 
 const profileLink = computed(() => (props.post.user ? route('profile.activities', props.post.user.username) : null));
@@ -17,9 +17,9 @@ const profileLink = computed(() => (props.post.user ? route('profile.activities'
 
 <template>
     <div class="w-[210px] rounded bg-blue-100 px-1.5 py-2 text-gray-600 dark:bg-slate-700 dark:text-gray-300">
-        <ul class="mb-1 list-inside list-disc text-xs">
-            <li>{{ actionText }} {{ formatRelative(post.created_at) }}</li>
-            <li v-if="isEdited">edited {{ formatRelative(post.updated_at) }}</li>
+        <ul class="mb-2 list-inside list-disc text-xs">
+            <li>{{ $t(actionText) }} {{ formatRelative(post.created_at) }}</li>
+            <li v-if="isEdited">{{ $t('edited,') }} {{ formatRelative(post.updated_at) }}</li>
         </ul>
 
         <component
@@ -29,7 +29,7 @@ const profileLink = computed(() => (props.post.user ? route('profile.activities'
         >
             <ShowUserAvatar :entity="post" class="size-10" />
             <div class="text-sm font-semibold" :class="profileLink ? 'group-hover:underline' : ''">
-                {{ post.user?.username ?? '[Deleted User]' }}
+                {{ post.user?.username ?? $t('[Deleted User]') }}
             </div>
         </component>
     </div>

@@ -26,10 +26,9 @@ const isAuthUser = computed(() => props.user?.username === authUser?.username);
             </CardTitle>
 
             <CardDescription class="min-w-0">
-                <p v-if="user.bio" class="break-words">{{ user.bio }}</p>
-                <p v-else-if="isAuthUser" class="break-words">
-                    This is your optional bio. Right now, only you can see it. You can edit it by clicking the EDIT button underneath your avatar and
-                    it will display here for all to see.
+                <p class="break-words">
+                    <template v-if="user.bio">{{ user.bio }}</template>
+                    <template v-else-if="isAuthUser">{{ $t('Bio...') }}</template>
                 </p>
             </CardDescription>
         </CardHeader>
@@ -39,16 +38,16 @@ const isAuthUser = computed(() => props.user?.username === authUser?.username);
                 <div v-if="user.location" class="flex items-center justify-between">
                     <dt class="font-medium text-slate-500">
                         <i class="ri-user-location-line"></i>
-                        Location
+                        {{ $t('Location') }}:
                     </dt>
                     <dt>{{ user.location }}</dt>
                 </div>
                 <div v-if="user.created_at" class="flex items-center justify-between">
-                    <dt class="font-medium text-slate-500"><i class="ri-time-line"></i> Member Since</dt>
+                    <dt class="font-medium text-slate-500"><i class="ri-time-line"></i> {{ $t('Member Since') }}:</dt>
                     <dt>{{ formatRelative(user.created_at) }}</dt>
                 </div>
                 <div v-if="user.job_title" class="flex items-center justify-between">
-                    <dt class="font-medium text-slate-500"><i class="ri-briefcase-line"></i> Profession</dt>
+                    <dt class="font-medium text-slate-500"><i class="ri-briefcase-line"></i> {{ $t('Profession') }}:</dt>
                     <dt>{{ user.job_title }}</dt>
                 </div>
             </dl>
@@ -58,13 +57,13 @@ const isAuthUser = computed(() => props.user?.username === authUser?.username);
             <Link v-if="isAuthUser" :href="route('account.profile.edit')" class="min-w-0 flex-1">
                 <Button variant="outline" class="text-md w-full break-words">
                     <i class="ri-edit-2-fill text-xl"></i>
-                    Edit Profile
+                    {{ $t('Edit Profile') }}
                 </Button>
             </Link>
 
             <Button v-else variant="outline" class="text-md flex-1">
                 <i class="ri-user-follow-fill text-xl"></i>
-                Follow
+                {{ $t('Follow') }}
             </Button>
 
             <div class="space-x-2 sm:shrink-0">

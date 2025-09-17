@@ -180,6 +180,7 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'tags-exists' => 'Some of the selected tags are invalid.'
     ],
 
     /*

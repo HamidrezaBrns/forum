@@ -23,7 +23,7 @@ const profileLink = computed(() => (props.comment.user ? route('profile.activiti
             class="inline-flex items-center gap-2"
         >
             <ShowUserAvatar :entity="comment" />
-            <div class="font-semibold group-hover:underline">{{ comment.user?.username ?? '[Deleted User]' }}│</div>
+            <div class="font-semibold group-hover:underline">{{ comment.user?.username ?? $t('[Deleted User]') }}│</div>
         </component>
 
         <span>{{ formatRelative(comment.created_at) }}</span>

@@ -49,10 +49,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 
     <AdminLayout :breadcrumbs="breadcrumbs">
         <ContainerAdmin>
-            <h2 class="mb-2 text-lg font-medium">Comments</h2>
+            <h2 class="mb-2 text-lg font-medium">{{ $t('Comments') }}</h2>
 
             <div class="mb-2 flex flex-wrap items-center gap-4">
-                <SearchRealtime :route="route('admin.comments.index')" placeholder="Search comments..." :only="['comments']" />
+                <SearchRealtime :route="route('admin.comments.index')" :placeholder="$t('Search comments by body or user...')" :only="['comments']" />
             </div>
 
             <Table>
@@ -108,7 +108,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
                         <TableCell class="break-words">
                             <Link :href="route('admin.users.show', c.user_id)" class="text-blue-600 hover:underline">
-                                {{ c.user.username }}
+                                {{ c.user?.username ?? $t('[Deleted User]') }}
                             </Link>
                         </TableCell>
 
@@ -124,13 +124,13 @@ const breadcrumbs: BreadcrumbItem[] = [
                                     </ShadcnButton>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                    <DropdownMenuLabel class="in-rtl:text-right">{{ $t('Actions') }}</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
 
                                     <DropdownMenuItem as-child>
-                                        <button type="button" class="w-full" @click="actionHandler.delete(c.id)">
-                                            <Trash2 class="mr-1 size-4" />
-                                            Delete
+                                        <button type="button" class="w-full flex-row-reverse" @click="actionHandler.delete(c.id)">
+                                            <Trash2 class="me-1 size-4" />
+                                            {{ $t('Delete') }}
                                         </button>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>

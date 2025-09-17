@@ -9,6 +9,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html[lang="fa"] body {
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
 @theme inline {
     --font-sans: Instrument Sans, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 

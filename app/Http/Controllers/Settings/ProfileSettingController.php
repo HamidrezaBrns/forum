@@ -31,13 +31,19 @@ class ProfileSettingController extends Controller
 
         $user = $request->user();
 
-        if ($request->hasFile('avatar') || $request->avatar === null) {
+        if ($request->removeAvatar === true) {
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
+                $user->avatar = null;
             }
+
         }
 
         if ($request->hasFile('avatar')) {
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
             $validated['avatar'] = $request->avatar->store('avatars', 'public');
         }
 

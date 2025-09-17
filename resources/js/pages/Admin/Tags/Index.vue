@@ -51,16 +51,16 @@ const breadcrumbs: BreadcrumbItem[] = [
     <AdminLayout :breadcrumbs="breadcrumbs">
         <ContainerAdmin>
             <div class="mb-4 flex flex-wrap items-center justify-between">
-                <h2 class="text-lg font-medium">Tags</h2>
+                <h2 class="text-lg font-medium">{{ $t('Tags') }}</h2>
             </div>
 
             <div class="mb-2 flex flex-wrap items-center justify-between gap-4">
-                <SearchRealtime :route="route('admin.tags.index')" placeholder="Search tags by name or description" :only="['tags']" />
+                <SearchRealtime :route="route('admin.tags.index')" :placeholder="$t('Search tags by name or description...')" :only="['tags']" />
 
                 <Link :href="route('admin.tags.create')">
                     <ShadcnButton variant="outline">
                         <CirclePlus />
-                        Create Tag
+                        {{ $t('Create Tag') }}
                     </ShadcnButton>
                 </Link>
             </div>
@@ -123,20 +123,20 @@ const breadcrumbs: BreadcrumbItem[] = [
                                     </ShadcnButton>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                    <DropdownMenuLabel class="in-rtl:text-right">{{ $t('Actions') }}</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
 
                                     <DropdownMenuItem as-child>
-                                        <Link :href="route('admin.tags.edit', tag.id)" as="button" class="block w-full">
-                                            <PencilLine class="mr-1 size-4" />
-                                            Edit
+                                        <Link :href="route('admin.tags.edit', tag.id)" as="button" class="block w-full flex-row-reverse">
+                                            <PencilLine class="me-1 size-4" />
+                                            {{ $t('Edit') }}
                                         </Link>
                                     </DropdownMenuItem>
 
                                     <DropdownMenuItem as-child>
-                                        <button type="button" class="w-full" @click="actionHandler.delete(tag.id)">
-                                            <Trash2 class="mr-1 size-4" />
-                                            Delete
+                                        <button type="button" class="w-full flex-row-reverse" @click="actionHandler.delete(tag.id)">
+                                            <Trash2 class="me-1 size-4" />
+                                            {{ $t('Delete') }}
                                         </button>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>

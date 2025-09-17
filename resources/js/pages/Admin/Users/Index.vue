@@ -71,13 +71,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
     <AdminLayout :breadcrumbs="breadcrumbs">
         <ContainerAdmin>
-            <h2 class="mb-2 text-lg font-medium">Users</h2>
+            <h2 class="mb-2 text-lg font-medium">{{ $t('Users') }}</h2>
 
             <div class="mb-2 flex flex-wrap items-center gap-4">
                 <SearchRealtime
                     :route="route('admin.users.index')"
                     :only="['users']"
-                    placeholder="Search users by username, email or full name."
+                    :placeholder="$t('Search users by username, email or full name...')"
                 />
             </div>
 
@@ -152,36 +152,42 @@ const breadcrumbs: BreadcrumbItem[] = [
                                         <Ellipsis />
                                     </ShadcnButton>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuContent class="in-rtl:text-right">
+                                    <DropdownMenuLabel>{{ $t('Actions') }}</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
 
-                                    <DropdownMenuItem as-child v-if="!u.deleted_at">
-                                        <Link :href="route('profile.activities', u.username)" as="button" class="block w-full">
-                                            <FileSymlink class="mr-1 size-4" />
-                                            Go to the page
+                                    <DropdownMenuItem as-child>
+                                        <Link
+                                            :href="route('profile.activities', u.username)"
+                                            as="button"
+                                            class="block w-full flex-row-reverse disabled:opacity-50"
+                                            :disabled="u.deleted_at"
+                                            :title="u.deleted_at ? $t('User has been deleted') : ''"
+                                        >
+                                            <FileSymlink class="me-1 size-4" />
+                                            {{ $t('Go to the page') }}
                                         </Link>
                                     </DropdownMenuItem>
 
                                     <template v-if="!u.is_admin">
                                         <DropdownMenuItem as-child v-if="u.deleted_at">
-                                            <button type="button" class="w-full" @click="actionHandler.restore(u.id)">
-                                                <RotateCcw class="mr-1 size-4" />
-                                                Restore
+                                            <button type="button" class="w-full flex-row-reverse" @click="actionHandler.restore(u.id)">
+                                                <RotateCcw class="me-1 size-4" />
+                                                {{ $t('Restore') }}
                                             </button>
                                         </DropdownMenuItem>
 
                                         <DropdownMenuItem as-child v-else>
-                                            <button type="button" class="w-full" @click="actionHandler.softDelete(u.id)">
-                                                <Eraser class="mr-1 size-4" />
-                                                Soft delete
+                                            <button type="button" class="w-full flex-row-reverse" @click="actionHandler.softDelete(u.id)">
+                                                <Eraser class="me-1 size-4" />
+                                                {{ $t('Soft delete') }}
                                             </button>
                                         </DropdownMenuItem>
 
                                         <DropdownMenuItem as-child>
-                                            <button type="button" class="w-full" @click="actionHandler.forceDelete(u.id)">
-                                                <Trash2 class="mr-1 size-4" />
-                                                Force delete
+                                            <button type="button" class="w-full flex-row-reverse" @click="actionHandler.forceDelete(u.id)">
+                                                <Trash2 class="me-1 size-4" />
+                                                {{ $t('Force delete') }}
                                             </button>
                                         </DropdownMenuItem>
                                     </template>

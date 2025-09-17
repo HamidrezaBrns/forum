@@ -75,16 +75,19 @@ const activityConfig = computed(() => {
 <template>
     <div class="relative">
         <!-- Icon -->
-        <div class="absolute top-4 -left-4 flex size-8 items-center justify-center rounded-full border bg-background" :class="activityConfig.color">
+        <div
+            class="absolute top-4 flex size-8 items-center justify-center rounded-full border bg-background ltr:-left-4 rtl:-right-4"
+            :class="activityConfig.color"
+        >
             <component :is="activityConfig.icon" class="size-5" />
         </div>
 
         <!-- Content -->
-        <div class="ml-6 min-w-0 rounded-md bg-gray-100 px-4 py-2 dark:bg-gray-800">
+        <div class="ms-6 min-w-0 rounded-md bg-gray-100 px-4 py-2 dark:bg-gray-800">
             <div class="mt-1 text-sm text-gray-500">{{ formatFull(activity.created_at) }}</div>
 
             <div class="line-clamp-1 min-w-0 text-lg font-medium">
-                {{ activityConfig.label }}
+                {{ $t(activityConfig.label) }}
                 <template v-if="relatedQuestion">
                     <Link
                         v-if="relatedQuestion.title"
@@ -93,7 +96,7 @@ const activityConfig = computed(() => {
                     >
                         {{ relatedQuestion.title }}
                     </Link>
-                    <span v-else class="text-gray-400 italic">[deleted question]</span>
+                    <span v-else class="text-gray-400 italic">{{ $t('[Deleted Question]') }}</span>
                 </template>
             </div>
 

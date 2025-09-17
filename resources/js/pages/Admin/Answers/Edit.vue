@@ -53,7 +53,7 @@ const updateAnswer = async () => {
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Admin', href: '/admin' },
     { title: 'Answer', href: route('admin.answers.index') },
-    { title: props.answer.id, href: route('admin.answers.show', props.answer.id) },
+    { title: `${props.answer.id}`, href: route('admin.answers.show', props.answer.id) },
     { title: 'Edit', href: route('admin.answers.edit', props.answer.id) },
 ];
 </script>
@@ -62,21 +62,21 @@ const breadcrumbs: BreadcrumbItem[] = [
 
     <AdminLayout :breadcrumbs="breadcrumbs">
         <Container>
-            <Heading title="Edit Answer" />
+            <Heading :title="$t('Edit Answer')" />
 
             <form @submit.prevent="updateAnswer">
                 <div class="mb-4">
-                    <Label class="mb-1" for="body">Body</Label>
+                    <Label class="mb-1" for="body">{{ $t('Body') }}</Label>
                     <TiptapEditor v-model="answerForm.body" />
                     <InputError :message="answerForm.errors.body" class="mt-1" />
                 </div>
 
                 <Button type="submit" :disabled="answerForm.processing">
                     <LoaderCircle v-if="answerForm.processing" class="h-4 w-4 animate-spin" />
-                    Update Answer
+                    {{ $t('Update') }}
                 </Button>
-                <Button type="button" @click="discardEditAnswer" variant="outline" class="ml-2" :disabled="answerForm.processing || !isDirty">
-                    Discard
+                <Button type="button" @click="discardEditAnswer" variant="outline" class="ms-2" :disabled="answerForm.processing || !isDirty">
+                    {{ $t('Discard') }}
                 </Button>
             </form>
         </Container>

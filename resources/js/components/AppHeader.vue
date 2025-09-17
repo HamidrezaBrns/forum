@@ -2,6 +2,7 @@
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import SearchSection from '@/components/SearchSection.vue';
 import ShowUserAvatar from '@/components/ShowUserAvatar.vue';
 import { Button } from '@/components/ui/button';
@@ -10,9 +11,10 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuT
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import UserMenuContent from '@/components/UserMenuContent.vue';
+import { useDirection } from '@/composables/useDirection';
 import type { BreadcrumbItem, NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LogIn, Menu, MessageCircleQuestion } from 'lucide-vue-next';
+import { LogIn, Menu, MessageCircleQuestion } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 interface Props {
@@ -42,39 +44,29 @@ const mainNavItems: NavItem[] = [
 
 const rightNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-        isActive: false,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
-        isActive: false,
-    },
-    {
         title: 'Log In',
         href: route('login'),
         icon: LogIn,
         isActive: !page.props.auth.user,
     },
 ];
+
+const { isRTL } = useDirection();
 </script>
 
 <template>
-    <div class="sticky top-0 z-20 bg-background">
+    <div class="sticky top-0 z-20 bg-background" dir="ltr">
         <div class="border-b border-sidebar-border/80">
             <div class="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
                 <!-- Mobile Menu -->
                 <div class="lg:hidden">
                     <Sheet>
                         <SheetTrigger :as-child="true">
-                            <Button variant="ghost" size="icon" class="mr-2 h-9 w-9">
+                            <Button variant="ghost" size="icon" class="me-2 h-9 w-9">
                                 <Menu class="h-5 w-5" />
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side="left" class="w-[300px] p-6">
+                        <SheetContent :side="isRTL ? 'right' : 'left'" class="w-[300px] p-6">
                             <SheetTitle class="sr-only">Navigation Menu</SheetTitle>
                             <SheetHeader class="flex justify-start text-left">
                                 <AppLogoIcon class="size-6 fill-current text-black dark:text-white" />
@@ -89,14 +81,14 @@ const rightNavItems: NavItem[] = [
                                         :class="activeItemStyles(item.href)"
                                     >
                                         <component v-if="item.icon" :is="item.icon" class="h-5 w-5" />
-                                        {{ item.title }}
+                                        {{ $t(item.title) }}
                                     </Link>
                                 </nav>
                                 <div class="flex flex-col space-y-4">
                                     <div v-for="item in rightNavItems" :key="item.title">
                                         <Link v-if="item.isActive" :href="item.href" class="flex items-center space-x-2 text-sm font-medium">
                                             <component v-if="item.icon" :is="item.icon" class="h-5 w-5" />
-                                            <span>{{ item.title }}</span>
+                                            <span>{{ $t(item.title) }}</span>
                                         </Link>
                                     </div>
                                 </div>
@@ -111,15 +103,16 @@ const rightNavItems: NavItem[] = [
 
                 <!-- Desktop Menu -->
                 <div class="hidden h-full lg:flex lg:flex-1">
-                    <NavigationMenu class="ml-10 flex h-full items-stretch">
+                    <NavigationMenu class="ms-10 flex h-full items-stretch">
                         <NavigationMenuList class="flex h-full items-stretch space-x-2">
                             <NavigationMenuItem v-for="(item, index) in mainNavItems" :key="index" class="relative flex h-full items-center">
                                 <Link
                                     :class="[navigationMenuTriggerStyle(), activeItemStyles(item.href), 'h-9 cursor-pointer px-3']"
                                     :href="item.href"
+                                    class="flex-row-reverse gap-2"
                                 >
-                                    <component v-if="item.icon" :is="item.icon" class="mr-2 h-4 w-4" />
-                                    {{ item.title }}
+                                    <component v-if="item.icon" :is="item.icon" class="h-4 w-4" />
+                                    {{ $t(item.title) }}
                                 </Link>
                                 <div
                                     v-if="isCurrentRoute(item.href)"
@@ -130,11 +123,8 @@ const rightNavItems: NavItem[] = [
                     </NavigationMenu>
                 </div>
 
-                <div class="ml-auto flex items-center space-x-2">
+                <div class="ms-auto flex items-center space-x-2">
                     <div class="relative flex items-center space-x-1">
-                        <!--                        <Button variant="ghost" size="icon" class="group h-9 w-9 cursor-pointer">-->
-                        <!--                            <Search class="size-5 opacity-80 group-hover:opacity-100" />-->
-                        <!--                        </Button>-->
                         <SearchSection />
 
                         <div class="hidden space-x-1 lg:flex">
@@ -150,13 +140,15 @@ const rightNavItems: NavItem[] = [
                                             </Button>
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                            <p>{{ item.title }}</p>
+                                            <p>{{ $t(item.title) }}</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
                             </template>
                         </div>
                     </div>
+
+                    <LanguageSwitcher />
 
                     <DropdownMenu v-if="auth.user">
                         <DropdownMenuTrigger :as-child="true">

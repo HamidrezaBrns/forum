@@ -5,8 +5,10 @@ import { Textarea } from '@/components/ui/textarea';
 import UserInfoCommentCard from '@/components/UserInfoCommentCard.vue';
 import { useConfirm } from '@/composables/useConfirm';
 import { formatFull } from '@/utilities/date';
+import { formatNumber } from '@/utilities/number';
 import { router, useForm } from '@inertiajs/vue3';
 import axios from 'axios';
+import { trans } from 'laravel-vue-i18n';
 import { nextTick, ref, useTemplateRef } from 'vue';
 import { toast } from 'vue-sonner';
 import { route } from 'ziggy-js';
@@ -74,7 +76,7 @@ const addComment = () => {
             commentForm.reset();
             fetchComments(); // reload the list from backend
             showComments.value = true;
-            toast.success('Comment successfully created.', {
+            toast.success(trans('Comment successfully created.'), {
                 description: formatFull(),
             });
         },
@@ -102,7 +104,7 @@ const deleteComment = async (commentId: number) => {
             comments.value = previousComments; // rollback
         },
         onSuccess: () => {
-            toast.info('Your comment has been deleted.');
+            toast.info(trans('Your comment has been deleted.'));
         },
     });
 };
@@ -116,7 +118,7 @@ const deleteComment = async (commentId: number) => {
             :disabled="commentsCount < 1"
             class="inline-flex cursor-pointer items-center gap-1 text-lg font-medium text-black disabled:cursor-default"
         >
-            <h3 v-text="`${commentsCount} Comments`" />
+            <h3>{{ $t(':count Comments', { count: formatNumber(commentsCount) }) }}</h3>
             <div v-if="commentsCount > 0" class="text-lg">
                 <i v-if="!showComments" class="ri-arrow-down-s-line"></i>
                 <i v-else class="ri-arrow-up-s-line"></i>
@@ -125,23 +127,21 @@ const deleteComment = async (commentId: number) => {
 
         <!-- create -->
         <div class="mt-2">
-            <Button v-if="!showForm" variant="outline" class="w-full" @click="show">Add a comment</Button>
+            <Button v-if="!showForm" variant="outline" class="w-full" @click="show">{{ $t('Leave a comment') }}</Button>
 
             <form v-if="showForm" @submit.prevent="addComment">
                 <div class="mb-2">
-                    <Textarea
-                        ref="commentTextarea"
-                        v-model="commentForm.body"
-                        class="flex-1 rounded border px-2 py-1"
-                        placeholder="Add a comment…"
-                        required
-                    />
+                    <Textarea ref="commentTextarea" v-model="commentForm.body" class="flex-1 rounded border px-2 py-1" required />
                     <InputError :message="commentForm.errors.body" />
                 </div>
-                <Button size="sm" :disabled="commentForm.processing" class="bg-blue-500 hover:bg-blue-400">Post</Button>
-                <Button size="sm" type="button" @click="cancelPostComment" variant="outline" class="ml-2" :disabled="commentForm.processing"
-                    >Cancel
-                </Button>
+                <div class="space-x-2">
+                    <Button size="sm" :disabled="commentForm.processing" class="bg-blue-500 hover:bg-blue-400">
+                        {{ $t('Post') }}
+                    </Button>
+                    <Button size="sm" type="button" @click="cancelPostComment" variant="outline" :disabled="commentForm.processing">
+                        {{ $t('Cancel') }}
+                    </Button>
+                </div>
             </form>
         </div>
 
@@ -151,21 +151,21 @@ const deleteComment = async (commentId: number) => {
             <!-- Comment List -->
             <ul v-else class="divide-y">
                 <li v-for="comment in comments" :key="comment.id" class="py-2">
-                    <div :id="`comment-${comment.id}`">
-                        <div class="flex items-center justify-between">
-                            <UserInfoCommentCard :comment="comment" />
+                    <div class="flex items-center justify-between">
+                        <UserInfoCommentCard :comment="comment" />
 
-                            <div class="flex space-x-2 text-xs">
-                                <!-- Delete Comment -->
-                                <form v-if="comment.can?.delete" @submit.prevent="deleteComment(comment.id)">
-                                    <button class="cursor-pointer font-mono text-red-700 hover:font-bold">DELETE</button>
-                                </form>
-                            </div>
+                        <div class="flex space-x-2 text-xs">
+                            <!-- Delete Comment -->
+                            <form v-if="comment.can?.delete" @submit.prevent="deleteComment(comment.id)">
+                                <button class="cursor-pointer font-mono text-red-700 hover:font-bold">
+                                    {{ $t('Delete') }}
+                                </button>
+                            </form>
                         </div>
+                    </div>
 
-                        <div class="ml-10 text-sm leading-4.5 wrap-anywhere">
-                            {{ comment.body }}
-                        </div>
+                    <div class="ms-10 text-sm leading-4.5 wrap-anywhere">
+                        {{ comment.body }}
                     </div>
                 </li>
             </ul>

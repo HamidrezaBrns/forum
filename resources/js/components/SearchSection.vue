@@ -31,8 +31,8 @@ const show = page.component === 'Questions/Index' || page.component === 'SearchR
                     id="search"
                     type="text"
                     autocomplete="off"
-                    placeholder="Search..."
-                    class="pr-5 pl-10"
+                    :placeholder="$t('Search...')"
+                    class="ps-10 pe-5"
                     v-model="searchForm.q"
                     @focus="showHelper = true"
                     @focusout.="showHelper = false"
@@ -53,10 +53,10 @@ const show = page.component === 'Questions/Index' || page.component === 'SearchR
                 v-if="showHelper"
                 class="absolute top-full mt-1 w-full rounded-lg border bg-white p-2 text-sm shadow-lg dark:bg-slate-900 dark:text-slate-200"
             >
-                <p class="mb-1 font-semibold">Search tips:</p>
-                <ul class="list-disc space-y-1 pl-4">
-                    <li>Type any <span class="font-mono">keyword</span> to search in questions</li>
-                    <li>Use <span class="font-mono">[tag]</span> to search with a tag</li>
+                <p class="mb-1 font-semibold">{{ $t('Tips') }}:</p>
+                <ul class="list-disc space-y-1 ps-4">
+                    <li>{{ $t('Type keywords to search questions.') }}</li>
+                    <li>{{ $t('Use :mark to search with a tag.', { mark: '[tag]' }) }}</li>
                 </ul>
             </div>
         </form>

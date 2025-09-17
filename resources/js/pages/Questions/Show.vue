@@ -11,7 +11,9 @@ import { useConfirm } from '@/composables/useConfirm';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Answer } from '@/types';
 import { formatFull } from '@/utilities/date';
+import { formatNumber } from '@/utilities/number';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import { trans } from 'laravel-vue-i18n';
 import { LoaderCircle } from 'lucide-vue-next';
 import { computed, nextTick, ref, useTemplateRef } from 'vue';
 import { toast } from 'vue-sonner';
@@ -24,6 +26,7 @@ const answerForm = useForm({
     body: '',
 });
 
+const page = usePage();
 const answerTextareaRef = useTemplateRef('answerTextarea');
 const answerIdBeingEdited = ref<null | number>(null);
 const answerBeingEdited = computed(() => props.answers.data.find((answer: { id: number }) => answer.id === answerIdBeingEdited.value));
@@ -51,14 +54,14 @@ const cancelEditAnswer = () => {
 
 // User can only add one answer for a question.
 const editingAnswer = ref(false);
-const userAnswer = computed(() => props.answers.data.find((answer: Answer) => answer.user.id === usePage().props.auth.user?.id));
+const userAnswer = computed(() => props.answers.data.find((answer: Answer) => answer.user.id === page.props.auth.user?.id));
 
 const addAnswer = () =>
     answerForm.post(route('questions.answers.store', props.question.id), {
         preserveScroll: true,
         onSuccess: () => {
             answerForm.reset();
-            toast.success('Answer successfully created.', {
+            toast.success(trans('Answer posted successfully.'), {
                 description: () => formatFull(),
             });
         },
@@ -84,7 +87,7 @@ const updateAnswer = async () => {
             preserveScroll: true,
             onSuccess: () => {
                 cancelEditAnswer();
-                toast('Your answer successfully edited.', {
+                toast(trans('Your answer edited successfully.'), {
                     description: formatFull(),
                 });
             },
@@ -100,7 +103,7 @@ const deleteAnswer = async (answerId: number) => {
     router.delete(route('answers.destroy', { answer: answerId, page: props.answers.meta.current_page }), {
         preserveScroll: true,
         onSuccess: () => {
-            toast('Answer has been deleted.');
+            toast.info(trans('Your answer has been deleted.'));
         },
     });
 };
@@ -116,7 +119,7 @@ const deleteQuestion = async (questionId: number) => {
     router.delete(route('questions.destroy', questionId), {
         preserveScroll: true,
         onSuccess: () => {
-            toast.info('Question has been deleted.');
+            toast.info(trans('Question has been deleted.'));
         },
     });
 };
@@ -137,7 +140,7 @@ const closeQuestion = async (questionId: number) => {
         {
             preserveScroll: true,
             onSuccess: () => {
-                toast.info('Question has been closed.');
+                toast.info(trans('Question has been closed.'));
             },
         },
     );
@@ -151,18 +154,14 @@ const closeQuestion = async (questionId: number) => {
         <Container class="lg:max-w-[1000px]">
             <!-- question -->
             <div class="border-b-4 border-dashed">
-                <h1 class="mb-6 ml-2 text-2xl font-bold break-words">{{ question.title }}</h1>
+                <h1 class="ms-2 mb-6 text-2xl font-bold break-words">{{ question.title }}</h1>
                 <PostField class="mb-4" :post="question" @close="closeQuestion" @edit="editQuestion" @delete="deleteQuestion" />
             </div>
 
             <!-- answers -->
             <div>
                 <div class="mt-6">
-                    <Heading
-                        :title="`${answers.meta.total} ${answers.meta.total > 1 ? 'Answers' : 'Answer'}`"
-                        description="Your answers are sorted first by highest score, then by posting time."
-                        class="ml-2"
-                    />
+                    <Heading :title="$t(':count Answers', { count: formatNumber(answers.meta.total) })" class="ms-2" />
 
                     <div class="divide-y-2">
                         <div v-for="answer in answers.data" :key="answer.id">
@@ -173,56 +172,54 @@ const closeQuestion = async (questionId: number) => {
                     <DetailedPagination :meta="answers.meta" :only="['answers']" />
                 </div>
 
-                <div v-if="$page.props.auth.user">
-                    <Card v-if="question.status === 'closed'" class="text-amber-800 font-medium">
+                <div v-if="page.props.auth.user">
+                    <Card v-if="question.status === 'closed'" class="font-medium text-amber-800">
                         <CardContent>
                             <i class="ri-alarm-warning-line text-xl"></i>
-                            <span>This question has been closed by owner, you can no longer submit or edit your answer.</span>
+                            {{ $t('This question has been closed by owner, you can no longer submit or edit your answer.') }}
                         </CardContent>
                     </Card>
 
-                    <Card v-else-if="!question.can?.create_answer && !editingAnswer" class="text-amber-800 font-medium">
+                    <Card v-else-if="!question.can?.create_answer && !editingAnswer" class="font-medium text-amber-800">
                         <CardContent>
                             <i class="ri-alarm-warning-line text-xl"></i>
-                            You have already submitted an answer to this question. You can still
-                            <Button variant="link" size="icon" @click="editAnswer(userAnswer.id)" class="cursor-pointer text-blue-500">edit </Button>
-                            it.
+                            {{ $t('You have already submitted an answer to this question.') }}
+                            <Button variant="link" size="icon" @click="editAnswer(userAnswer.id)" class="cursor-pointer ps-1 text-blue-500">
+                                {{ $t('Edit') }}
+                            </Button>
                         </CardContent>
                     </Card>
 
                     <form v-else @submit.prevent="() => (answerIdBeingEdited ? updateAnswer() : addAnswer())">
-                        <h2 class="mt-8 mb-5 text-lg font-medium"><i class="ri-question-answer-fill"></i> Your Answer</h2>
+                        <h2 class="mt-8 mb-5 text-lg font-medium"><i class="ri-question-answer-fill"></i> {{ $t('Your Answer') }}</h2>
 
                         <div class="mb-4">
-                            <TiptapEditor
-                                ref="answerTextarea"
-                                v-model="answerForm.body"
-                                placeholder="Here's what I think..."
-                                editorClass="!min-h-[160px]"
-                            />
+                            <TiptapEditor ref="answerTextarea" v-model="answerForm.body" editorClass="!min-h-[160px]" />
                             <InputError :message="answerForm.errors.body" />
                         </div>
 
-                        <Button type="submit" :disabled="answerForm.processing">
-                            <LoaderCircle v-if="answerForm.processing" class="h-4 w-4 animate-spin" />
-                            {{ answerIdBeingEdited ? 'Update Answer' : 'Post Answer' }}
-                        </Button>
-                        <Button
-                            type="button"
-                            v-if="answerIdBeingEdited"
-                            @click="cancelEditAnswer"
-                            variant="outline"
-                            class="ml-2"
-                            :disabled="answerForm.processing"
-                        >
-                            Cancel
-                        </Button>
+                        <div class="space-x-2">
+                            <Button type="submit" :disabled="answerForm.processing">
+                                <LoaderCircle v-if="answerForm.processing" class="h-4 w-4 animate-spin" />
+                                {{ answerIdBeingEdited ? $t('Update') : $t('Post') }}
+                            </Button>
+                            <Button
+                                type="button"
+                                v-if="answerIdBeingEdited"
+                                @click="cancelEditAnswer"
+                                variant="outline"
+                                :disabled="answerForm.processing"
+                            >
+                                {{ $t('Cancel') }}
+                            </Button>
+                        </div>
                     </form>
                 </div>
 
                 <div v-else>
-                    <Link :href="route('login')" class="text-blue-500 hover:underline">Log in</Link>
-                    , for posting your answer...
+                    {{ $t('To post an answer, first') }}
+                    <Link :href="route('login')" class="text-blue-500 hover:underline">{{ $t('Log in') }}</Link>
+                    .
                 </div>
             </div>
         </Container>

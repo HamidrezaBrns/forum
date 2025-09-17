@@ -37,7 +37,7 @@ const highlightAll = () => {
 
 <template>
     <div class="flex">
-        <div class="border-l-2 pr-6 pl-2 text-center text-xl font-medium">
+        <div class="border-s-2 ps-2 pe-6 text-center text-xl font-medium">
             <Voting :post="post" class="pb-4" />
             <AcceptAnswer v-if="answer" :answer="answer" />
         </div>
@@ -52,25 +52,25 @@ const highlightAll = () => {
 
             <div class="mt-6 flex justify-between">
                 <div class="flex space-x-2">
-                    <template v-if="question?.status === 'open'">
+                    <template v-if="question ? question?.status === 'open' : true">
                         <form v-if="question && question.can?.close" @submit.prevent="$emit('close', post.id)">
                             <Button variant="outline">
                                 <Pause />
-                                Close
+                                {{ $t('Close') }}
                             </Button>
                         </form>
 
                         <form v-if="post.can?.update" @submit.prevent="$emit('edit', post.id)">
                             <Button variant="outline">
                                 <PencilLine />
-                                Edit
+                                {{ $t('Edit') }}
                             </Button>
                         </form>
 
                         <form v-if="post.can?.delete" @submit.prevent="$emit('delete', post.id)">
                             <Button variant="outline">
                                 <Trash2 />
-                                Delete
+                                {{ $t('Delete') }}
                             </Button>
                         </form>
                     </template>
@@ -78,7 +78,7 @@ const highlightAll = () => {
                     <Card v-else-if="question && question.closed_at" class="self-start font-medium text-amber-800">
                         <CardContent>
                             <i class="ri-alarm-warning-line text-xl"></i>
-                            Question has been closed on <span>{{ formatFull(question.closed_at) }}</span>
+                            {{ $t('Question has been closed on :date.', { date: formatFull(question.closed_at) }) }}
                         </CardContent>
                     </Card>
                 </div>

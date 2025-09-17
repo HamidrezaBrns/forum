@@ -28,7 +28,7 @@ const editTag = () =>
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Admin', href: '/admin' },
     { title: 'Tags', href: route('admin.tags.index') },
-    { title: props.tag.id, href: route('admin.tags.show', props.tag.id) },
+    { title: `${props.tag.id}`, href: route('admin.tags.show', props.tag.id) },
     { title: 'Edit', href: route('admin.tags.edit', props.tag.id) },
 ];
 </script>
@@ -37,24 +37,24 @@ const breadcrumbs: BreadcrumbItem[] = [
 
     <AdminLayout :breadcrumbs="breadcrumbs">
         <ContainerAdmin>
-            <Heading title="Edit Tag" />
+            <Heading :title="$t('Edit Tag')" />
 
             <form @submit.prevent="editTag">
                 <div class="mb-4">
-                    <Label for="name" class="mb-1">Name</Label>
+                    <Label for="name" class="mb-1">{{ $t('Name') }}</Label>
                     <Input id="name" type="text" autofocus v-model="tagForm.name" />
                     <InputError :message="tagForm.errors.name" class="mt-1" />
                 </div>
 
                 <div class="mb-4">
-                    <Label for="description" class="mb-1">Description</Label>
+                    <Label for="description" class="mb-1">{{ $t('Description') }}</Label>
                     <Textarea id="description" v-model="tagForm.description" />
                     <InputError :message="tagForm.errors.description" class="mt-1" />
                 </div>
 
                 <Button type="submit" :disabled="tagForm.processing">
                     <LoaderCircle v-if="tagForm.processing" class="h-4 w-4 animate-spin" />
-                    Edit
+                    {{ $t('Edit') }}
                 </Button>
             </form>
         </ContainerAdmin>

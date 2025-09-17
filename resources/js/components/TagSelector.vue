@@ -6,6 +6,7 @@ import { computed, ref } from 'vue';
 
 const props = defineProps<{
     availableTags: { id: number; name: string }[];
+    placeholder?: string;
 }>();
 
 const tags = defineModel<string[]>({ default: [] });
@@ -28,7 +29,7 @@ const addTag = (tag: string) => {
 </script>
 
 <template>
-    <Combobox v-model="tags" v-model:open="open" :ignore-filter="true">
+    <Combobox v-model="tags" v-model:open="open" ignore-filter>
         <ComboboxAnchor as-child>
             <TagsInput id="tags" v-model="tags" class="w-full gap-2 px-2">
                 <div class="flex flex-wrap items-center gap-2">
@@ -39,11 +40,7 @@ const addTag = (tag: string) => {
                 </div>
 
                 <ComboboxInput v-model="searchTerm" as-child>
-                    <TagsInputInput
-                        @keydown.enter.prevent
-                        class="h-auto w-full border-none p-0 focus-visible:ring-0"
-                        placeholder="Up to 5 tags - e.g. php, laravel"
-                    />
+                    <TagsInputInput @keydown.enter.prevent :placeholder="placeholder" />
                 </ComboboxInput>
             </TagsInput>
 
