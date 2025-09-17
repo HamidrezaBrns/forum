@@ -6,8 +6,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VoteController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
 
 Route::get('/', function () {
     return to_route('questions.index');
@@ -42,9 +44,15 @@ Route::get('/answers/{answer}/comments', [CommentController::class, 'answerComme
 
 Route::get('/@{user:username}', ProfileController::class)->name('profile.activities');
 
-//Route::get('/@{user:username}', function (User $user) {
-//    return $user->activities()->with(['subject'])->latest()->paginate();
-//});
+
+Route::post('/language', function (Request $request) {
+    $locale = $request->input('locale');
+    if (in_array($locale, ['en', 'fa'])) {
+        session(['locale' => $locale]);
+    }
+    return back();
+})->name('language.switch');
+
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
