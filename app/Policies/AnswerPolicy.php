@@ -31,6 +31,9 @@ class AnswerPolicy
             return false;
         }
 
+//        if ($question->isClosed()) {
+//            return false;
+//        }
         return $answer->question()->select('status')->value('status') === QuestionStatus::OPEN;
     }
 
@@ -43,6 +46,9 @@ class AnswerPolicy
             return false;
         }
 
+//        if ($question->isClosed()) {
+//            return false;
+//        }
         return $answer->question()->select('status')->value('status') === QuestionStatus::OPEN;
     }
 
