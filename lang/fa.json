@@ -82,7 +82,7 @@
     "Save": "ذخیره",
     "Saved.": "ذخیره شد.",
     "Account Credentials": "اعتبارنامه‌های حساب",
-    "Appearance": "ظاهر",
+    "Appearance": "ظاهر صفحه",
     "Update your username, email address ans password.": "نام کاربری، آدرس ایمیل و رمز عبور خود را به‌روزرسانی کنید.",
     "Change email and username": "تغییر ایمیل و نام کاربری",
     "Username": "نام کاربری",
@@ -108,6 +108,9 @@
     "Light": "روشن",
     "Dark": "تیره",
     "System": "سیستم",
+    "Language settings": "تنظیمات زبان",
+    "Language": "زبان",
+    "You can change the language of the app to your locale language.": "می‌توانید زبان برنامه را به زبان محلی خود تغییر دهید.",
     "Dashboard": "داشبورد",
     "Users": "کاربران",
     "Tags": "برچسب‌ها",
@@ -148,6 +151,7 @@
     "Don't have an account?": "حساب کاربری ندارید؟",
     "Sign up": "ثبت‌نام کنید",
     "Create an account": "ایجاد حساب کاربری",
+    "Create Account": "ایجاد حساب کاربری",
     "Register": "ثبت‌نام",
     "Already have an account?": "از قبل حساب کاربری دارید؟",
     "Enter your email to receive a password reset link": "با وارد کردن ایمیل، لینک بازنشانی رمز عبور برای شما ارسال می‌شود",
@@ -177,5 +181,6 @@
     "Are you sure you want to update this question?": "آیا مطمئن هستید که می‌خواهید این سوال را به‌روزرسانی کنید؟",
     "Ignore all changes?": "همه تغییرات نادیده گرفته شود؟",
     "This answer accepted as correct.": "این پاسخ به عنوان پاسخ صحیح پذیرفته شد.",
-    "Correct answer selection canceled.": "انتخاب پاسخ صحیح لغو شد."
+    "Correct answer selection canceled.": "انتخاب پاسخ صحیح لغو شد.",
+    "Guest User": "کاربر مهمان"
 }
