@@ -7,13 +7,12 @@ import { ref } from 'vue';
 
 const languages = [
     { title: 'English', code: 'en' },
-    { title: 'فارسی', code: 'fa' },
+    { title: 'Persian', code: 'fa' },
 ];
 
 const currentLang = ref(document.documentElement.lang || 'en');
 
 const changeLanguage = (lang) => {
-    // if (lang.code === currentLang.value) return;
 
     router.post(
         route('language.switch'),
