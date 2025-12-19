@@ -130,7 +130,7 @@ const updatePassword = () => {
                         </div>
 
                         <div class="flex items-center gap-4">
-                            <Button :disabled="identityForm.processing">{{ $t('Save identity') }}</Button>
+                            <Button :disabled="identityForm.processing">{{ $t('Save') }}</Button>
 
                             <Transition
                                 enter-active-class="transition ease-in-out"

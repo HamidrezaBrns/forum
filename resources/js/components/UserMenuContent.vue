@@ -17,20 +17,20 @@ defineProps<Props>();
 </script>
 
 <template>
-    <DropdownMenuLabel class="p-0 font-normal">
-        <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-            <UserInfo :user="user" :show-email="true" />
+    <DropdownMenuLabel dir="auto" class="p-0 font-normal">
+        <div class="flex items-center gap-2 px-1 py-1.5 text-sm rtl:flex-row-reverse">
+            <UserInfo :user="user" show-email />
         </div>
     </DropdownMenuLabel>
     <DropdownMenuSeparator />
-    <DropdownMenuGroup>
-        <DropdownMenuItem :as-child="true">
+    <DropdownMenuGroup dir="auto">
+        <DropdownMenuItem as-child>
             <Link class="block w-full" :href="route('profile.activities', user.username)" prefetch as="button">
                 <LayoutGrid class="me-2 size-4" />
                 {{ $t('Profile') }}
             </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem :as-child="true">
+        <DropdownMenuItem as-child>
             <Link class="block w-full" :href="route('account.edit')" prefetch as="button">
                 <Settings class="me-2 size-4" />
                 {{ $t('Settings') }}
@@ -38,7 +38,7 @@ defineProps<Props>();
         </DropdownMenuItem>
     </DropdownMenuGroup>
     <DropdownMenuSeparator />
-    <DropdownMenuItem :as-child="true">
+    <DropdownMenuItem dir="auto" as-child>
         <Link class="block w-full" method="post" :href="route('logout')" @click="handleLogout" as="button">
             <LogOut class="me-2 size-4" />
             {{ $t('Log out') }}

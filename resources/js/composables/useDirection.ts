@@ -1,25 +1,32 @@
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 export function useDirection() {
     const dir = ref<'rtl' | 'ltr'>('ltr');
 
     const updateDir = () => {
-        dir.value = (document.documentElement.getAttribute('dir') as 'rtl' | 'ltr') || 'ltr';
+        if (typeof document !== 'undefined') {
+            dir.value = (document.documentElement.getAttribute('dir') as 'rtl' | 'ltr') || 'ltr';
+        }
     };
 
-    onMounted(() => {
-        updateDir();
+    updateDir();
 
-        const observer = new MutationObserver(() => updateDir());
-        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
+    let observer: MutationObserver | null = null;
+
+    onMounted(() => {
+        observer = new MutationObserver(() => updateDir());
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['dir'],
+        });
+    });
+
+    onUnmounted(() => {
+        observer?.disconnect();
     });
 
     const isRTL = computed(() => dir.value === 'rtl');
     const isLTR = computed(() => dir.value === 'ltr');
 
-    return {
-        dir,
-        isRTL,
-        isLTR,
-    };
+    return { dir, isRTL, isLTR };
 }

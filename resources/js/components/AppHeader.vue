@@ -2,7 +2,7 @@
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
+import GuestMenuContent from '@/components/GuestMenuContent.vue';
 import SearchSection from '@/components/SearchSection.vue';
 import ShowUserAvatar from '@/components/ShowUserAvatar.vue';
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,7 @@ import UserMenuContent from '@/components/UserMenuContent.vue';
 import { useDirection } from '@/composables/useDirection';
 import type { BreadcrumbItem, NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { LogIn, Menu, MessageCircleQuestion } from 'lucide-vue-next';
+import { LogIn, Menu, MessageCircleQuestion, Settings, UserRoundCog } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 interface Props {
@@ -42,20 +42,13 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
-const rightNavItems: NavItem[] = [
-    {
-        title: 'Log In',
-        href: route('login'),
-        icon: LogIn,
-        isActive: !page.props.auth.user,
-    },
-];
+const rightNavItems: NavItem[] = [];
 
 const { isRTL } = useDirection();
 </script>
 
 <template>
-    <div class="sticky top-0 z-20 bg-background" dir="ltr">
+    <div class="sticky top-0 z-20 bg-background">
         <div class="border-b border-sidebar-border/80">
             <div class="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
                 <!-- Mobile Menu -->
@@ -91,6 +84,28 @@ const { isRTL } = useDirection();
                                             <span>{{ $t(item.title) }}</span>
                                         </Link>
                                     </div>
+
+                                    <div class="flex flex-col space-y-4">
+                                        <Link
+                                            v-if="!auth.user"
+                                            :href="route('login')"
+                                            as="button"
+                                            class="flex items-center space-x-2 text-sm font-medium"
+                                        >
+                                            <LogIn class="me-2 size-4" />
+                                            {{ $t('Log In') }}
+                                        </Link>
+
+                                        <Link
+                                            :href="route('appearance')"
+                                            prefetch
+                                            as="button"
+                                            class="flex items-center space-x-2 text-sm font-medium"
+                                        >
+                                            <Settings class="me-2 size-4" />
+                                            {{ $t('Settings') }}
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </SheetContent>
@@ -109,7 +124,7 @@ const { isRTL } = useDirection();
                                 <Link
                                     :class="[navigationMenuTriggerStyle(), activeItemStyles(item.href), 'h-9 cursor-pointer px-3']"
                                     :href="item.href"
-                                    class="flex-row-reverse gap-2"
+                                    class="gap-2 rtl:flex-row-reverse"
                                 >
                                     <component v-if="item.icon" :is="item.icon" class="h-4 w-4" />
                                     {{ $t(item.title) }}
@@ -129,11 +144,11 @@ const { isRTL } = useDirection();
 
                         <div class="hidden space-x-1 lg:flex">
                             <template v-for="item in rightNavItems" :key="item.title">
-                                <TooltipProvider :delay-duration="0">
+                                <TooltipProvider v-if="item.isActive" :delay-duration="5">
                                     <Tooltip>
                                         <TooltipTrigger>
                                             <Button variant="ghost" size="icon" as-child class="group h-9 w-9 cursor-pointer">
-                                                <Link :href="item.href" v-if="item.isActive">
+                                                <Link :href="item.href">
                                                     <span class="sr-only">{{ item.title }}</span>
                                                     <component :is="item.icon" class="size-5 opacity-80 group-hover:opacity-100" />
                                                 </Link>
@@ -148,20 +163,23 @@ const { isRTL } = useDirection();
                         </div>
                     </div>
 
-                    <LanguageSwitcher />
-
-                    <DropdownMenu v-if="auth.user">
+                    <DropdownMenu>
                         <DropdownMenuTrigger :as-child="true">
                             <Button
+                                v-if="auth.user"
                                 variant="ghost"
                                 size="icon"
                                 class="relative size-10 w-auto rounded-full p-1 focus-within:ring-2 focus-within:ring-primary"
                             >
                                 <ShowUserAvatar class="rounded-full" />
                             </Button>
+                            <Button v-else variant="ghost" size="icon">
+                                <UserRoundCog class="size-6" />
+                            </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" class="w-56">
-                            <UserMenuContent :user="auth.user" />
+                            <UserMenuContent v-if="auth.user" :user="auth.user" />
+                            <GuestMenuContent v-else />
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
