@@ -21,7 +21,7 @@ const authUser = page.props.auth.user;
 const sidebarNavItems: NavItem[] = [
     {
         title: trans('Activities'),
-        href: `/@${props.user.username}/activities`,
+        href: `/@${props.user.username}`,
         icon: Activity,
     },
 ];
