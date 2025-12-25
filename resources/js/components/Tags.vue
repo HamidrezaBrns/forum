@@ -4,15 +4,21 @@ import { Link } from '@inertiajs/vue3';
 
 defineProps({
     tags: Object,
+    disable: {
+        type: Boolean,
+        default: false,
+    },
 });
 </script>
 
 <template>
     <ul class="flex flex-wrap gap-1">
         <li v-for="(tag, index) in tags" :key="index">
-            <Link :href="route('questions.tagged', tag)">
-                <Badge variant="secondary" class="font-bold text-gray-600 dark:text-gray-400 hover:opacity-80">{{ tag }}</Badge>
-            </Link>
+            <component :is="disable ? 'div' : Link" v-bind="!disable ? { href: route('questions.tagged', tag), class: 'hover:opacity-80' } : {}">
+                <Badge :variant="disable ? 'outline' : 'secondary'" class="font-bold text-gray-600 dark:text-gray-400">
+                    {{ tag }}
+                </Badge>
+            </component>
         </li>
     </ul>
 </template>
