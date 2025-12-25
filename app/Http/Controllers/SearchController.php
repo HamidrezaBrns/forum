@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\QuestionResource;
 use App\Models\Question;
+use App\QuestionStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class SearchController extends Controller
     {
         $search_q = $request->query('q');
 
-        $questions = Question::with(['user', 'tags'])
+        $questions = Question::with(['user', 'tags'])->whereNot('status', QuestionStatus::DRAFT)
             ->when($search_q, function (Builder $query) use ($search_q) {
                 [$tags, $text] = $this->parseSearchQuery($search_q);
 

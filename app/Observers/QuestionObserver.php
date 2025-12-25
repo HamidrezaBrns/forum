@@ -12,12 +12,11 @@ class QuestionObserver
      */
     public function created(Question $question): void
     {
-        Activity::create([
-            'user_id' => $question->user_id,
-            'subject_id' => $question->id,
-            'subject_type' => 'question',
-            'type' => 'created_question',
-        ]);
+        if ($question->isDraft()) {
+            return;
+        }
+
+        $this->logActivity($question);
     }
 
     /**
@@ -25,7 +24,9 @@ class QuestionObserver
      */
     public function updated(Question $question): void
     {
-        //
+        if ($question->wasChanged('status') && $question->isOpen()) {
+            $this->logActivity($question);
+        }
     }
 
     /**
@@ -50,5 +51,15 @@ class QuestionObserver
     public function forceDeleted(Question $question): void
     {
         //
+    }
+
+    protected function logActivity(Question $question): void
+    {
+        Activity::create([
+            'user_id' => $question->user_id,
+            'subject_id' => $question->id,
+            'subject_type' => 'question',
+            'type' => 'created_question',
+        ]);
     }
 }

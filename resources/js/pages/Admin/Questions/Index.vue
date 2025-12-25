@@ -217,7 +217,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                                         </Link>
                                     </DropdownMenuItem>
 
-                                    <DropdownMenuItem as-child v-else>
+                                    <DropdownMenuItem as-child v-else-if="q.closed_at">
                                         <Link
                                             method="patch"
                                             :href="route('admin.questions.reopen', q.id)"
@@ -240,7 +240,13 @@ const breadcrumbs: BreadcrumbItem[] = [
                                     </DropdownMenuItem>
 
                                     <DropdownMenuItem as-child v-else>
-                                        <button type="button" class="w-full flex-row-reverse" @click="actionHandler.softDelete(q.id)">
+                                        <button
+                                            type="button"
+                                            class="w-full flex-row-reverse disabled:opacity-50"
+                                            @click="actionHandler.softDelete(q.id)"
+                                            :disabled="q.status === 'draft'"
+                                            :title="q.status === 'draft' ? $t('Question is in draft form') : ''"
+                                        >
                                             <Eraser class="me-1 size-4" />
                                             {{ $t('Soft delete') }}
                                         </button>

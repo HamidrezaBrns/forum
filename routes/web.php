@@ -19,6 +19,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('questions.answers', AnswerController::class)->shallow()->only(['store', 'update', 'destroy']);
 
+    Route::get('/questions/drafts', [QuestionController::class, 'drafts'])->name('questions.drafts');
+    Route::post('/questions/draft', [QuestionController::class, 'storeDraft'])->name('questions.storeDraft');
+    Route::delete('/questions/{question}/draft', [QuestionController::class, 'destroyDraft'])->name('questions.destroyDraft');
+    Route::put('/questions/{question}/publish', [QuestionController::class, 'publish'])->name('questions.publish');
+
     Route::post('/{type}/{id}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 

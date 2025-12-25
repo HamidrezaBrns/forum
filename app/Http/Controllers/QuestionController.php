@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Posts\DraftRequest;
+use App\Http\Requests\Posts\QuestionRequest;
 use App\Http\Resources\QuestionResource;
 use App\Http\Resources\AnswerResource;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Tag;
+use App\QuestionStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
@@ -21,7 +24,14 @@ class QuestionController extends Controller
         Gate::authorize('view-any', Question::class);
 
         return inertia('Questions/Index', [
-            'questions' => fn() => QuestionResource::collection(Question::with(['user', 'tags'])->latest()->latest('id')->paginate()),
+            'questions' => fn() => QuestionResource::collection(
+                Question::query()
+                    ->with(['user', 'tags'])
+                    ->whereNot('status', QuestionStatus::DRAFT)
+                    ->latest()
+                    ->latest('id')
+                    ->paginate()
+            ),
         ]);
     }
 
@@ -40,21 +50,12 @@ class QuestionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(QuestionRequest $request)
     {
         Gate::authorize('create', Question::class);
 
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'min:10', 'max:120'],
-            'body' => ['required', 'string', 'min:100', 'max:10000'],
-            'tags' => ['nullable', 'array', 'max:5'],
-            'tags.*' => ['string', 'exists:tags,name'],
-        ], [
-            'tags.*.exists' => __('validation.custom.tags-exists'),
-        ]);
-
         $question = Question::create([
-            ...Arr::except($validated, 'tags'),
+            ...Arr::except($request->validated(), 'tags'),
             'user_id' => $request->user()->id,
         ]);
 
@@ -103,21 +104,16 @@ class QuestionController extends Controller
     {
         Gate::authorize('update', $question);
 
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'min:10', 'max:120'],
-            'body' => ['required', 'string', 'min:100', 'max:10000'],
-            'tags' => ['nullable', 'array', 'max:5'],
-            'tags.*' => ['string', 'exists:tags,name'],
-        ], [
-            'tags.*.exists' => __('validation.custom.tags-exists'),
-        ]);
+        $validated = $question->isDraft()
+            ? app(DraftRequest::class)->validated()
+            : app(QuestionRequest::class)->validated();
 
         $question->update(Arr::except($validated, 'tags'));
 
         $tagIds = Tag::whereIn('name', $validated['tags'] ?? [])->pluck('id')->toArray();
         $question->tags()->sync($tagIds);
 
-        return to_route('questions.show', $question);
+        return $question->isDraft() ? back() : to_route('questions.show', $question);
     }
 
     /**
@@ -157,6 +153,63 @@ class QuestionController extends Controller
     public function close(Question $question)
     {
         $question->close();
+
+        return back();
+    }
+
+    public function drafts(Request $request)
+    {
+        $user = $request->user();
+
+        return inertia('Questions/Drafts', [
+            'drafts' => fn() => QuestionResource::collection(
+                $user->questions()
+                    ->with('tags')
+                    ->where('status', QuestionStatus::DRAFT)
+                    ->latest()
+                    ->paginate(10)
+            )
+        ]);
+    }
+
+    public function storeDraft(DraftRequest $request)
+    {
+        $question = Question::create([
+            ...Arr::except($request->validated(), 'tags'),
+            'status' => QuestionStatus::DRAFT,
+            'user_id' => $request->user()->id,
+        ]);
+
+        if (!empty($validated['tags'])) {
+            $tagIds = Tag::whereIn('name', $validated['tags'])->pluck('id')->toArray();
+            $question->tags()->sync($tagIds);
+        }
+
+        return to_route('questions.show', $question);
+    }
+
+    public function publish(QuestionRequest $request, Question $question)
+    {
+        Gate::authorize('update', $question);
+        abort_if(!$question->isDraft(), 403);
+
+        $question->update([
+            ...Arr::except($request->validated(), 'tags'),
+            'status' => QuestionStatus::OPEN,
+            'created_at' => now(),
+//            'updated_at' => now(),
+        ]);
+        $tagIds = Tag::whereIn('name', $validated['tags'] ?? [])->pluck('id')->toArray();
+        $question->tags()->sync($tagIds);
+
+        return to_route('questions.show', $question);
+    }
+
+    public function destroyDraft(Question $question)
+    {
+        Gate::authorize('delete', $question);
+
+        $question->forceDelete();
 
         return back();
     }

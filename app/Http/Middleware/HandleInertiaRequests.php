@@ -57,9 +57,7 @@ class HandleInertiaRequests extends Middleware
 
             'locale' => fn() => app()->getLocale(),
 
-//            'permissions' => [
-//                'create_questions' => $request->user()?->can('create', Question::class),
-//            ]
+            'drafts_count' => fn() => $request->user()?->questions()->where('status', 'draft')->count(),
         ];
     }
 }

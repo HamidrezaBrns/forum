@@ -158,8 +158,18 @@ const closeQuestion = async (questionId: number) => {
                 <PostField class="mb-4" :post="question" @close="closeQuestion" @edit="editQuestion" @delete="deleteQuestion" />
             </div>
 
+            <Card
+                v-if="question.status === 'draft'"
+                class="mt-6 bg-yellow-50 font-medium text-amber-800 dark:border-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-200"
+            >
+                <CardContent>
+                    <i class="ri-alarm-warning-line text-xl"></i>
+                    {{ $t('This question is still a draft and only visible to you.') }}
+                </CardContent>
+            </Card>
+
             <!-- answers -->
-            <div>
+            <div v-else>
                 <div class="mt-6">
                     <Heading :title="$t(':count Answers', { count: formatNumber(answers.meta.total) })" class="ms-2" />
 
@@ -173,14 +183,20 @@ const closeQuestion = async (questionId: number) => {
                 </div>
 
                 <div v-if="page.props.auth.user">
-                    <Card v-if="question.status === 'closed'" class="font-medium text-amber-800">
+                    <Card
+                        v-if="question.status === 'closed'"
+                        class="bg-yellow-50 font-medium text-amber-800 dark:border-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-200"
+                    >
                         <CardContent>
                             <i class="ri-alarm-warning-line text-xl"></i>
                             {{ $t('This question has been closed by owner, you can no longer submit or edit your answer.') }}
                         </CardContent>
                     </Card>
 
-                    <Card v-else-if="!question.can?.create_answer && !editingAnswer" class="font-medium text-amber-800">
+                    <Card
+                        v-else-if="!question.can?.create_answer && !editingAnswer"
+                        class="bg-yellow-50 font-medium text-amber-800 dark:border-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-200"
+                    >
                         <CardContent>
                             <i class="ri-alarm-warning-line text-xl"></i>
                             {{ $t('You have already submitted an answer to this question.') }}

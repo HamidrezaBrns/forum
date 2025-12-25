@@ -21,6 +21,10 @@ class QuestionPolicy
      */
     public function view(?User $user, Question $question): bool
     {
+        if ($question->isDraft()) {
+            return $question->user_id === $user?->id;
+        }
+
         return true;
     }
 
@@ -40,6 +44,7 @@ class QuestionPolicy
         if ($question->isClosed()) {
             return false;
         }
+
         return $user->id === $question->user_id;
     }
 

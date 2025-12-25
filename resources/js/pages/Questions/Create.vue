@@ -11,7 +11,6 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { formatFull } from '@/utilities/date';
 import { Head, useForm } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
-import { LoaderCircle } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { toast } from 'vue-sonner';
 
@@ -37,7 +36,15 @@ const tagError = computed(() => {
 const createQuestion = () =>
     questionForm.post(route('questions.store'), {
         onSuccess: () =>
-            toast.success(trans('Your question created successfully.'), {
+            toast.success(trans('Your question has been published successfully.'), {
+                description: formatFull(),
+            }),
+    });
+
+const saveDraft = () =>
+    questionForm.post(route('questions.storeDraft'), {
+        onSuccess: () =>
+            toast.success(trans('Draft saved.'), {
                 description: formatFull(),
             }),
     });
@@ -75,10 +82,17 @@ const createQuestion = () =>
                     <InputError :message="questionForm.errors.body" class="mt-1" />
                 </div>
 
-                <Button type="submit" :disabled="questionForm.processing">
-                    <LoaderCircle v-if="questionForm.processing" class="h-4 w-4 animate-spin" />
-                    {{ $t('Post') }}
-                </Button>
+                <div class="flex gap-3">
+                    <Button type="submit" :disabled="questionForm.processing">
+                        <!--                        <LoaderCircle v-if="questionForm.processing" class="h-4 w-4 animate-spin" />-->
+                        {{ $t('Publish') }}
+                    </Button>
+
+                    <Button type="button" variant="outline" :disabled="questionForm.processing" @click="saveDraft">
+                        <!--                        <LoaderCircle v-if="questionForm.processing" class="h-4 w-4 animate-spin" />-->
+                        {{ $t('Save as Draft') }}
+                    </Button>
+                </div>
             </form>
         </Container>
     </AppLayout>

@@ -90,9 +90,19 @@ class Question extends Model implements Viewable
     }
 
     // helper methods
+    public function isOpen(): bool
+    {
+        return $this->status === QuestionStatus::OPEN;
+    }
+
     public function isClosed(): bool
     {
         return $this->status === QuestionStatus::CLOSED;
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->status === QuestionStatus::DRAFT;
     }
 
     public function close(): void

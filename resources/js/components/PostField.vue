@@ -51,9 +51,9 @@ const highlightAll = () => {
             <Tags v-if="question" :tags="question.tags" />
 
             <div class="mt-6 flex justify-between">
-                <div class="flex space-x-2">
-                    <template v-if="question ? question?.status === 'open' : true">
-                        <form v-if="question && question.can?.close" @submit.prevent="$emit('close', post.id)">
+                <div class="flex items-center space-x-2">
+                    <template v-if="question ? question?.status !== 'closed' : true">
+                        <form v-if="question && question.can?.close && question.status !== 'draft'" @submit.prevent="$emit('close', post.id)">
                             <Button variant="outline">
                                 <Pause />
                                 {{ $t('Close') }}
@@ -75,7 +75,10 @@ const highlightAll = () => {
                         </form>
                     </template>
 
-                    <Card v-else-if="question && question.closed_at" class="self-start font-medium text-amber-800">
+                    <Card
+                        v-else-if="question && question.closed_at"
+                        class="self-start bg-yellow-50 font-medium text-amber-800 dark:border-yellow-700 dark:bg-yellow-900"
+                    >
                         <CardContent>
                             <i class="ri-alarm-warning-line text-xl"></i>
                             {{ $t('Question has been closed on :date.', { date: formatFull(question.closed_at) }) }}
