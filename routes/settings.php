@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-Route::redirect('/settings', '/settings/appearance');
+Route::redirect('/settings', '/settings/appearance')->name('settings');
 
 Route::middleware('auth')->group(function () {
     Route::get('/settings/account', [CredentialSettingController::class, 'edit'])->name('account.edit');
