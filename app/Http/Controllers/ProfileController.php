@@ -6,7 +6,6 @@ use App\Http\Resources\ActivityResource;
 use App\Http\Resources\UserResource;
 use App\Models\Answer;
 use App\Models\Comment;
-use App\Models\Question;
 use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
