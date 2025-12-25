@@ -70,7 +70,7 @@ const addAnswer = () =>
 const { confirmation } = useConfirm();
 
 const updateAnswer = async () => {
-    if (!(await confirmation('Update Answer', 'Are you sure you want to update this answer?'))) {
+    if (!(await confirmation(trans('Update Answer'), trans('Are you sure you want to update this answer?')))) {
         // await nextTick(() => {
         //     answerTextareaRef.value?.$el.focus();
         // });
@@ -87,7 +87,7 @@ const updateAnswer = async () => {
             preserveScroll: true,
             onSuccess: () => {
                 cancelEditAnswer();
-                toast(trans('Your answer edited successfully.'), {
+                toast(trans('Your answer was successfully edited.'), {
                     description: formatFull(),
                 });
             },
@@ -96,7 +96,7 @@ const updateAnswer = async () => {
 };
 
 const deleteAnswer = async (answerId: number) => {
-    if (!(await confirmation('Delete Answer', 'Are you sure you want to delete this answer?'))) {
+    if (!(await confirmation(trans('Delete Answer'), trans('Are you sure you want to delete this answer?')))) {
         return;
     }
 
@@ -112,7 +112,7 @@ const deleteAnswer = async (answerId: number) => {
 const editQuestion = (questionId: number) => router.get(route('questions.edit', questionId));
 
 const deleteQuestion = async (questionId: number) => {
-    if (!(await confirmation('Delete Question', 'Are you sure you want to delete this question?'))) {
+    if (!(await confirmation(trans('Delete Question'), trans('Are you sure you want to delete this question?')))) {
         return;
     }
 
@@ -127,8 +127,8 @@ const deleteQuestion = async (questionId: number) => {
 const closeQuestion = async (questionId: number) => {
     if (
         !(await confirmation(
-            'Close Question',
-            'Are you sure you want to close this question? Closing a question prevents users from submitting or editing answers.',
+            trans('Close Question'),
+            trans('Are you sure you want to close this question? Closing a question prevents users from submitting or editing answers.'),
         ))
     ) {
         return;
