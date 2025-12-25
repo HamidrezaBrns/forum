@@ -8,10 +8,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
-
-Route::get('/', function () {
-    return to_route('questions.index');
-})->name('home');
+Route::redirect('/', '/questions')->name('home');
 
 Route::get('/search', SearchController::class)->name('search');
 
