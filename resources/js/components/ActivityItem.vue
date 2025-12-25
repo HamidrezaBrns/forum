@@ -96,8 +96,9 @@ const activityConfig = computed(() => {
                     >
                         {{ relatedQuestion.title }}
                     </Link>
-                    <span v-else class="text-gray-400 italic">{{ $t('[Deleted Question]') }}</span>
                 </template>
+
+                <span v-else class="text-base text-gray-500 italic">{{ $t('[Deleted Question]') }}</span>
             </div>
 
             <div class="prose text-sm text-gray-600 dark:text-gray-300 dark:prose-invert">
